@@ -8,7 +8,6 @@ import { FutureInnovationSection } from '../components/FutureInnovationSection';
 import { MedicalBillingProcessTimeline } from '../components/MedicalBillingProcessTimeline';
 import { SpecialtiesSection } from '../components/SpecialtiesSection';
 import { TestimonialsSection } from '../components/TestimonialsSection';
-import { FooterServicesPagesCta } from '../components/FooterServicesPagesCta';
 import { 
   CheckCircle2, 
   ArrowRight, 
@@ -331,18 +330,6 @@ export function MedicalBillingPage({ onBackToHome }: MedicalBillingPageProps) {
 
         </div>
       </section>
-
-      {/* 9. Pre-Footer Services Pages CTA */}
-      <FooterServicesPagesCta 
-        onBookStrategyCall={() => {
-          const el = document.getElementById('consultation-form');
-          el?.scrollIntoView({ behavior: 'smooth' });
-        }}
-        onCalculateSavings={() => {
-          const el = document.getElementById('consultation-form');
-          el?.scrollIntoView({ behavior: 'smooth' });
-        }}
-      />
 
     </div>
   );
