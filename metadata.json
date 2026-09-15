@@ -1,0 +1,8 @@
+{
+  "name": "ascentmb.com",
+  "description": "A medical billing company website home page.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
