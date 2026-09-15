@@ -58,6 +58,9 @@ const homeOnboardingSteps: OnboardingStep[] = [
 export default function App() {
   const [currentPage, setCurrentPage] = useState<'home' | 'medical-billing'>(() => {
     if (typeof window !== 'undefined') {
+      const pathname = window.location.pathname.replace(/\/+$/, '');
+      if (pathname === '/medical-billing' || pathname === '/services') return 'medical-billing';
+
       const hash = window.location.hash.replace('#', '');
       if (hash === 'medical-billing' || hash === 'services') return 'medical-billing';
       if (hash === 'home') return 'home';
@@ -75,28 +78,48 @@ export default function App() {
   useEffect(() => {
     if (typeof window !== 'undefined') {
       localStorage.setItem('ascent_active_page', currentPage);
-      window.location.hash = currentPage;
+      const targetPath = currentPage === 'medical-billing' ? '/medical-billing' : '/';
+      
+      // Clean up any old hash and keep clean pathname
+      if (window.location.hash === '#medical-billing' || window.location.hash === '#services' || window.location.hash === '#home') {
+        window.history.replaceState({ page: currentPage }, '', targetPath);
+      } else if (window.location.pathname !== targetPath) {
+        window.history.replaceState({ page: currentPage }, '', targetPath);
+      }
     }
   }, [currentPage]);
 
   useEffect(() => {
-    const handleHash = () => {
+    const handleLocationChange = () => {
+      const pathname = window.location.pathname.replace(/\/+$/, '');
       const hash = window.location.hash.replace('#', '');
-      if (hash === 'medical-billing' || hash === 'services') {
+
+      if (pathname === '/medical-billing' || pathname === '/services' || hash === 'medical-billing' || hash === 'services') {
         setCurrentPage('medical-billing');
-      } else if (hash === 'home') {
+        if (window.location.hash) {
+          window.history.replaceState({ page: 'medical-billing' }, '', '/medical-billing');
+        }
+      } else if (pathname === '' || pathname === '/' || hash === 'home') {
         setCurrentPage('home');
       }
     };
-    window.addEventListener('hashchange', handleHash);
-    return () => window.removeEventListener('hashchange', handleHash);
+
+    window.addEventListener('popstate', handleLocationChange);
+    window.addEventListener('hashchange', handleLocationChange);
+    return () => {
+      window.removeEventListener('popstate', handleLocationChange);
+      window.removeEventListener('hashchange', handleLocationChange);
+    };
   }, []);
 
   const navigateTo = (page: 'home' | 'medical-billing') => {
     setCurrentPage(page);
     if (typeof window !== 'undefined') {
       localStorage.setItem('ascent_active_page', page);
-      window.location.hash = page;
+      const targetPath = page === 'medical-billing' ? '/medical-billing' : '/';
+      if (window.location.pathname !== targetPath || window.location.hash) {
+        window.history.pushState({ page }, '', targetPath);
+      }
     }
     setIsRcmMenuOpen(false);
     setMobileMenuOpen(false);
@@ -397,7 +420,10 @@ export default function App() {
       )}
 
       {/* --- Footer --- */}
-      <Footer />
+      <Footer 
+        onNavigateToMedicalBilling={() => navigateTo('medical-billing')}
+        onNavigateHome={() => navigateTo('home')}
+      />
     </div>
   );
 }

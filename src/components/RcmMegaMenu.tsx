@@ -287,15 +287,16 @@ export function RcmMegaMenu({ onClose, onSelectService }: RcmMegaMenuProps) {
 
               {/* CTA Button */}
               <div className="relative z-10 w-full pt-4">
-                <a
-                  href="#contact"
+                <button
+                  type="button"
                   onClick={() => {
                     if (onClose) onClose();
+                    onSelectService?.('billing');
                   }}
                   className="w-full inline-flex items-center justify-center py-3.5 px-6 bg-[#98C340] hover:bg-[#85ab36] text-white text-[17px] font-bold rounded-[6px] border border-[#7ea72d] shadow-md transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
                 >
                   Get Benefit Now!
-                </a>
+                </button>
               </div>
             </div>
           </div>

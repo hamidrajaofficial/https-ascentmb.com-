@@ -2,7 +2,12 @@ import React from 'react';
 import { MapPin, Mail, Phone, Facebook, Linkedin, Instagram, Twitter, ArrowRight, ShieldCheck, CheckCircle2 } from 'lucide-react';
 import logoImg from '../assets/images/cropped-cropped-AA-300x178-1-2-removebg-preview.png';
 
-export function Footer() {
+interface FooterProps {
+  onNavigateToMedicalBilling?: () => void;
+  onNavigateHome?: () => void;
+}
+
+export function Footer({ onNavigateToMedicalBilling, onNavigateHome }: FooterProps = {}) {
   return (
     <footer className="bg-[#154377] text-white pt-16 pb-8 border-t border-white/10 relative z-10">
       <div className="max-w-[1250px] mx-auto px-4">
@@ -12,7 +17,10 @@ export function Footer() {
           
           {/* Col 1: Brand Info */}
           <div className="lg:col-span-2 flex flex-col items-start pr-0 lg:pr-6">
-            <div className="bg-white px-3.5 py-1.5 rounded-xl inline-flex items-center mb-6 shadow-sm">
+            <div 
+              onClick={onNavigateHome} 
+              className={`bg-white px-3.5 py-1.5 rounded-xl inline-flex items-center mb-6 shadow-sm ${onNavigateHome ? 'cursor-pointer hover:opacity-95' : ''}`}
+            >
               <img 
                 src={logoImg} 
                 alt="Ascent Medical Billing" 
@@ -55,13 +63,13 @@ export function Footer() {
               Quick Links
             </h4>
             <ul className="space-y-3 text-sm text-gray-200">
-              <li><a href="#" className="hover:text-[#98C340] transition-colors flex items-center gap-1.5"><ArrowRight className="w-3 h-3 text-[#98C340]" /> About Us</a></li>
-              <li><a href="#" className="hover:text-[#98C340] transition-colors flex items-center gap-1.5"><ArrowRight className="w-3 h-3 text-[#98C340]" /> RCM Services</a></li>
-              <li><a href="#" className="hover:text-[#98C340] transition-colors flex items-center gap-1.5"><ArrowRight className="w-3 h-3 text-[#98C340]" /> Specialties</a></li>
-              <li><a href="#" className="hover:text-[#98C340] transition-colors flex items-center gap-1.5"><ArrowRight className="w-3 h-3 text-[#98C340]" /> EHR Expertise</a></li>
-              <li><a href="#" className="hover:text-[#98C340] transition-colors flex items-center gap-1.5"><ArrowRight className="w-3 h-3 text-[#98C340]" /> Virtual Assistants</a></li>
-              <li><a href="#" className="hover:text-[#98C340] transition-colors flex items-center gap-1.5"><ArrowRight className="w-3 h-3 text-[#98C340]" /> Blog & Insights</a></li>
-              <li><a href="#" className="hover:text-[#98C340] transition-colors flex items-center gap-1.5"><ArrowRight className="w-3 h-3 text-[#98C340]" /> Contact Us</a></li>
+              <li><button onClick={onNavigateHome} className="hover:text-[#98C340] transition-colors flex items-center gap-1.5 cursor-pointer text-left"><ArrowRight className="w-3 h-3 text-[#98C340]" /> About Us</button></li>
+              <li><button onClick={onNavigateToMedicalBilling} className="hover:text-[#98C340] transition-colors flex items-center gap-1.5 cursor-pointer text-left"><ArrowRight className="w-3 h-3 text-[#98C340]" /> RCM Services</button></li>
+              <li><a href="#contact" className="hover:text-[#98C340] transition-colors flex items-center gap-1.5"><ArrowRight className="w-3 h-3 text-[#98C340]" /> Specialties</a></li>
+              <li><a href="#contact" className="hover:text-[#98C340] transition-colors flex items-center gap-1.5"><ArrowRight className="w-3 h-3 text-[#98C340]" /> EHR Expertise</a></li>
+              <li><a href="#contact" className="hover:text-[#98C340] transition-colors flex items-center gap-1.5"><ArrowRight className="w-3 h-3 text-[#98C340]" /> Virtual Assistants</a></li>
+              <li><a href="#contact" className="hover:text-[#98C340] transition-colors flex items-center gap-1.5"><ArrowRight className="w-3 h-3 text-[#98C340]" /> Blog & Insights</a></li>
+              <li><a href="#contact" className="hover:text-[#98C340] transition-colors flex items-center gap-1.5"><ArrowRight className="w-3 h-3 text-[#98C340]" /> Contact Us</a></li>
             </ul>
           </div>
 
@@ -71,12 +79,12 @@ export function Footer() {
               RCM Services
             </h4>
             <ul className="space-y-3 text-sm text-gray-200">
-              <li><a href="#" className="hover:text-[#98C340] transition-colors flex items-center gap-1.5"><CheckCircle2 className="w-3.5 h-3.5 text-[#98C340]" /> Medical Billing & Coding</a></li>
-              <li><a href="#" className="hover:text-[#98C340] transition-colors flex items-center gap-1.5"><CheckCircle2 className="w-3.5 h-3.5 text-[#98C340]" /> Accounts Receivable (A/R)</a></li>
-              <li><a href="#" className="hover:text-[#98C340] transition-colors flex items-center gap-1.5"><CheckCircle2 className="w-3.5 h-3.5 text-[#98C340]" /> Denial Management</a></li>
-              <li><a href="#" className="hover:text-[#98C340] transition-colors flex items-center gap-1.5"><CheckCircle2 className="w-3.5 h-3.5 text-[#98C340]" /> Eligibility Verification</a></li>
-              <li><a href="#" className="hover:text-[#98C340] transition-colors flex items-center gap-1.5"><CheckCircle2 className="w-3.5 h-3.5 text-[#98C340]" /> Provider Credentialing</a></li>
-              <li><a href="#" className="hover:text-[#98C340] transition-colors flex items-center gap-1.5"><CheckCircle2 className="w-3.5 h-3.5 text-[#98C340]" /> Patient Billing & Support</a></li>
+              <li><button onClick={onNavigateToMedicalBilling} className="hover:text-[#98C340] transition-colors flex items-center gap-1.5 cursor-pointer text-left"><CheckCircle2 className="w-3.5 h-3.5 text-[#98C340]" /> Medical Billing & Coding</button></li>
+              <li><button onClick={onNavigateToMedicalBilling} className="hover:text-[#98C340] transition-colors flex items-center gap-1.5 cursor-pointer text-left"><CheckCircle2 className="w-3.5 h-3.5 text-[#98C340]" /> Accounts Receivable (A/R)</button></li>
+              <li><button onClick={onNavigateToMedicalBilling} className="hover:text-[#98C340] transition-colors flex items-center gap-1.5 cursor-pointer text-left"><CheckCircle2 className="w-3.5 h-3.5 text-[#98C340]" /> Denial Management</button></li>
+              <li><button onClick={onNavigateToMedicalBilling} className="hover:text-[#98C340] transition-colors flex items-center gap-1.5 cursor-pointer text-left"><CheckCircle2 className="w-3.5 h-3.5 text-[#98C340]" /> Eligibility Verification</button></li>
+              <li><button onClick={onNavigateToMedicalBilling} className="hover:text-[#98C340] transition-colors flex items-center gap-1.5 cursor-pointer text-left"><CheckCircle2 className="w-3.5 h-3.5 text-[#98C340]" /> Provider Credentialing</button></li>
+              <li><button onClick={onNavigateToMedicalBilling} className="hover:text-[#98C340] transition-colors flex items-center gap-1.5 cursor-pointer text-left"><CheckCircle2 className="w-3.5 h-3.5 text-[#98C340]" /> Patient Billing & Support</button></li>
             </ul>
           </div>
 
