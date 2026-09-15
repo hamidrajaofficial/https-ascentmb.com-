@@ -1,5 +1,6 @@
 import React from 'react';
-import { Calendar, ArrowRight, Sparkles } from 'lucide-react';
+import { Calendar } from 'lucide-react';
+import heroDoctorsTeamImg from '../assets/images/hero_doctors_team_1787328070635.jpg';
 
 interface MedicalBillingHeroProps {
   onBookCall?: () => void;
@@ -14,7 +15,7 @@ export function MedicalBillingHero({ onBookCall, onAboutClick }: MedicalBillingH
       <div 
         className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-40 scale-105 transform"
         style={{ 
-          backgroundImage: `url('/src/assets/images/hero_doctors_team_1787328070635.jpg')`,
+          backgroundImage: `url(${heroDoctorsTeamImg})`,
         }}
       />
 
@@ -26,10 +27,12 @@ export function MedicalBillingHero({ onBookCall, onAboutClick }: MedicalBillingH
 
       <div className="max-w-[1250px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
         
-        {/* Eyebrow Top Text */}
-        <div className="inline-flex items-center gap-2 text-white/90 text-sm sm:text-base font-semibold tracking-wide mb-4">
-          <Sparkles className="w-4 h-4 text-[#98C340]" />
-          <span>Struggling With Claim Denials And Slow Reimbursements?</span>
+        {/* Eyebrow */}
+        <div className="flex flex-col items-center mb-5">
+          <div className="eyebrow text-white font-bold text-[13px] tracking-wider mb-3 text-center">
+            Struggling With Claim Denials And Slow Reimbursements?
+          </div>
+          <div className="w-12 h-[2px] bg-[#98C340]"></div>
         </div>
 
         {/* Main Headline with Brand Accent */}

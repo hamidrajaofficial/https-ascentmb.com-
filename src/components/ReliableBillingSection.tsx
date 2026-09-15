@@ -1,5 +1,6 @@
 import React from 'react';
 import { Phone, FileText, Calendar, Plus } from 'lucide-react';
+import billingDeskImg from '../assets/images/medical_billing_desk_1787690184246.jpg';
 
 interface ReliableBillingSectionProps {
   onBookCall?: () => void;
@@ -79,7 +80,11 @@ export function ReliableBillingSection({
               {/* Main Photo Card */}
               <div className="relative z-10 bg-white rounded-tl-[36px] rounded-br-[12px] rounded-tr-[16px] rounded-bl-[16px] overflow-hidden shadow-2xl border-4 border-white mr-2 mb-2">
                 <img
-                  src="/src/assets/images/medical_billing_desk_1787690184246.jpg"
+                  src={billingDeskImg}
+                  onError={(e) => {
+                    // Fallback to high quality medical billing desk photo if needed
+                    e.currentTarget.src = "https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&q=80&w=1200";
+                  }}
                   alt="Medical Billing Consultants & Specialists"
                   className="w-full h-auto object-cover max-h-[380px] sm:max-h-[420px]"
                   referrerPolicy="no-referrer"
