@@ -218,9 +218,6 @@ export function RcmMegaMenu({ onClose, onSelectService }: RcmMegaMenuProps) {
               <h3 className="text-[17px] font-bold text-[#154377] font-outfit tracking-tight">
                 What We Do
               </h3>
-              <span className="text-xs text-gray-500 font-medium">
-                {rcmServicesList.length} Services Available
-              </span>
             </div>
 
             {/* Scrollable list of All 12 Medical Billing Services */}

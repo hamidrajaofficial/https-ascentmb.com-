@@ -249,9 +249,6 @@ export function SpecialtiesMegaMenu({
               <h3 className="text-[17px] font-semibold text-[#154377] font-outfit tracking-tight">
                 Specialties We <span className="text-[#98C340]">Serve</span>
               </h3>
-              <span className="text-xs text-gray-500 font-medium">
-                {specialtiesList.length} Specialties Available
-              </span>
             </div>
 
             {/* 3 Columns Listing: 15 items fit perfectly in 5 rows with compact gap between name & arrow */}
