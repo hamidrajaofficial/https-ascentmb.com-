@@ -103,7 +103,7 @@ export function FastOnboardingSection({
           
           {/* Continuous Connecting Line directly passing through the exact vertical center of the circles */}
           <div 
-            className="hidden lg:block absolute top-[44px] left-[10%] right-[10%] h-[3px] bg-gradient-to-r from-[#98C340]/40 via-[#154377] to-[#98C340]/40 z-0" 
+            className="hidden lg:block absolute top-[48px] left-[8%] right-[8%] h-[3px] bg-gradient-to-r from-[#154377] via-[#98C340] to-[#154377] z-0 rounded-full" 
           />
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-4 relative z-10">
@@ -117,28 +117,37 @@ export function FastOnboardingSection({
                   onClick={onStrategyCall}
                   className={`group flex flex-col items-center text-center p-4 sm:p-5 rounded-2xl transition-all duration-300 cursor-pointer ${
                     isActive 
-                      ? 'bg-[#f8fcf2] border border-[#d4ebb3] shadow-[0_6px_24px_rgba(152,195,64,0.18)] -translate-y-1' 
-                      : 'border border-transparent hover:bg-gray-50'
+                      ? 'bg-gradient-to-b from-[#f0f6fc] to-white border-2 border-[#154377] shadow-[0_12px_32px_rgba(21,67,119,0.14)] ring-4 ring-[#98C340]/30 -translate-y-1.5' 
+                      : 'border border-transparent hover:bg-slate-50/90 hover:border-slate-200/80 hover:shadow-md'
                   }`}
                 >
-                  {/* Step Circle with Relevant Icon & Active Elevation Ring */}
-                  <div className="relative mb-5 flex items-center justify-center">
+                  {/* Step Circle with Relevant Icon & Brand Accent Ring */}
+                  <div className="relative mb-4 flex items-center justify-center">
                     <div 
-                      className={`w-14 h-14 rounded-full bg-gradient-to-tr from-[#154377] to-[#98C340] text-white flex items-center justify-center transition-all duration-300 border-[3.5px] border-white z-10 ${
+                      className={`w-14 h-14 rounded-full bg-[#154377] text-white flex items-center justify-center transition-all duration-300 z-10 ${
                         isActive
-                          ? 'scale-110 shadow-[0_6px_22px_rgba(21,67,119,0.4)] ring-4 ring-[#98C340]/30'
-                          : 'shadow-[0_4px_16px_rgba(21,67,119,0.2)] group-hover:scale-105'
+                          ? 'border-[3.5px] border-[#98C340] scale-110 shadow-[0_8px_24px_rgba(21,67,119,0.4)] ring-4 ring-[#98C340]/40'
+                          : 'border-[3.5px] border-white shadow-[0_4px_16px_rgba(21,67,119,0.25)] ring-2 ring-[#98C340]/40 group-hover:scale-105 group-hover:border-[#98C340] group-hover:ring-4 group-hover:ring-[#98C340]/40'
                       }`}
                     >
                       {item.icon}
                     </div>
                   </div>
 
+                  {/* Step Number Badge */}
+                  <span 
+                    className={`inline-block px-2.5 py-0.5 rounded-full text-[11px] font-bold font-outfit uppercase tracking-widest mb-2.5 transition-all ${
+                      isActive 
+                        ? 'bg-[#154377] text-[#98C340] border border-[#98C340]/50 shadow-sm' 
+                        : 'bg-[#154377]/10 text-[#154377] group-hover:bg-[#154377] group-hover:text-[#98C340]'
+                    }`}
+                  >
+                    Step 0{item.step}
+                  </span>
+
                   {/* Step Title */}
                   <h3 
-                    className={`text-[17px] lg:text-[18px] font-bold font-outfit mb-2.5 transition-colors ${
-                      isActive ? 'text-[#154377]' : 'text-[#154377]/90 group-hover:text-[#154377]'
-                    }`}
+                    className="text-[17px] lg:text-[18px] font-bold font-outfit text-[#154377] mb-2 leading-snug tracking-tight"
                   >
                     {item.title}
                   </h3>
