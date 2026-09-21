@@ -97,6 +97,11 @@ export function MedicalBillingPage({ onBackToHome }: MedicalBillingPageProps) {
       {/* 3.3. Superior Healthcare Virtual Assistant Packages for Every Organization */}
       <VirtualAssistantPackagesSection 
         subtitle="We provide specialized virtual healthcare assistants trained in medical billing, charge entry, claim submission, and insurance follow-ups to maximize practice revenue."
+        showCta={true}
+        onCtaClick={() => {
+          const el = document.getElementById('consultation-form');
+          el?.scrollIntoView({ behavior: 'smooth' });
+        }}
         packages={[
           {
             icon: User,

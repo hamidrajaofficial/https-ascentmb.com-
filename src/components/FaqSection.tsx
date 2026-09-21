@@ -155,17 +155,163 @@ const faqData: FaqCategory[] = [
   }
 ];
 
-export function FaqSection() {
-  const [activeCategoryId, setActiveCategoryId] = useState<string>(faqData[0].id);
-  
-  // By default, open the first question of the active category
-  const [openQuestionId, setOpenQuestionId] = useState<string | null>(faqData[0].questions[0].id);
+export function getFaqDataForSpecialty(specialtyName: string): FaqCategory[] {
+  return [
+    {
+      id: 'spec-coding',
+      title: `${specialtyName} Coding & Modifiers`,
+      countLabel: '4 Questions',
+      questions: [
+        {
+          id: 'spec-c-1',
+          question: `How do your certified coders manage complex ${specialtyName} CPT codes, modifiers, and global periods?`,
+          answer: `Our AAPC and AHIMA-certified coders specialize in ${specialtyName} clinical terminology, complex CPT/HCPCS coding, and critical modifiers (including 25, 59, 76, 78, 26/TC, and X{EPSU} modifiers). We review encounter documentation to ensure every procedure and evaluation service meets strict clinical criteria before claim generation.`
+        },
+        {
+          id: 'spec-c-2',
+          question: `How do you stay compliant with Medicare LCD/NCD coverage policies for ${specialtyName}?`,
+          answer: `We continuously monitor CMS Local Coverage Determinations (LCDs), National Coverage Determinations (NCDs), and commercial payer medical policies governing ${specialtyName}. Our rules engine and coder audits crosswalk ICD-10 diagnostic codes with specific CPT codes to ensure medical necessity and prevent automated denials.`
+        },
+        {
+          id: 'spec-c-3',
+          question: `How are unlisted ${specialtyName} procedure codes and surgical/procedural attachments handled?`,
+          answer: `For complex or unlisted ${specialtyName} procedures, our certified coders compile comprehensive operative notes, clinical justification letters, and fee comparison benchmarks. We submit electronic attachments via secure clearinghouse 275 transactions, ensuring expedited manual payer adjudication.`
+        },
+        {
+          id: 'spec-c-4',
+          question: `Can you perform a historical chart audit to uncover missed or undercoded ${specialtyName} revenue?`,
+          answer: `Yes. We conduct retrospective coding and billing audits for ${specialtyName} practices. Our certified auditors evaluate historical claims to uncover unbilled supplies, missed secondary procedures, under-coded E/M levels, and unpaid chronic care or remote monitoring services.`
+        }
+      ]
+    },
+    {
+      id: 'spec-auth',
+      title: 'Prior Authorizations & Eligibility',
+      countLabel: '4 Questions',
+      questions: [
+        {
+          id: 'spec-a-1',
+          question: `How do you expedite prior authorizations for urgent ${specialtyName} procedures and diagnostics?`,
+          answer: `Our dedicated pre-authorization team initiates requests within 2 to 4 hours of receiving provider orders. We submit clinical charts, medical histories, and diagnostic indications directly through payer web portals, escalating urgent cases to ensure zero delay in patient care.`
+        },
+        {
+          id: 'spec-a-2',
+          question: `What is your process if a payer requests a peer-to-peer review for a ${specialtyName} treatment?`,
+          answer: `When a peer-to-peer review is requested, our team compiles an executive clinical summary highlighting conservative treatment history, relevant lab/imaging findings, and payer clinical guidelines. We then coordinate and book the review directly on your provider's calendar.`
+        },
+        {
+          id: 'spec-a-3',
+          question: `How do you eliminate front-end eligibility and coverage rejections?`,
+          answer: `We perform automated 270/271 real-time eligibility verifications 48 to 72 hours prior to scheduled ${specialtyName} appointments. We verify active benefits, primary/secondary coordination of benefits (COB), specialist copays, remaining deductibles, and required referral waivers.`
+        },
+        {
+          id: 'spec-a-4',
+          question: `Do you manage retrospective authorizations for emergency ${specialtyName} admissions or visits?`,
+          answer: `Yes. In urgent or emergent clinical scenarios where prior notification is impossible, our team files retro-authorizations within mandatory payer notification windows (typically 24 to 48 hours), backed by hospital face sheets and emergent clinical chart notes.`
+        }
+      ]
+    },
+    {
+      id: 'spec-denials',
+      title: 'Denials Management & AR Recovery',
+      countLabel: '4 Questions',
+      questions: [
+        {
+          id: 'spec-d-1',
+          question: `What is your first-pass clean claim rate for ${specialtyName} practices?`,
+          answer: `Ascent maintains an industry-leading 98%+ first-pass clean claim rate across all ${specialtyName} client practices through specialty-tailored claim scrubbers and dual-level coder verification.`
+        },
+        {
+          id: 'spec-d-2',
+          question: `How fast are ${specialtyName} claim denials investigated and appealed?`,
+          answer: `All ERAs and EOBs are posted within 24 hours. If a denial occurs, our denial management team analyzes the CARC/RARC codes immediately, updates clinical documentation or coding, and files an evidence-based appeal within 24 to 48 hours.`
+        },
+        {
+          id: 'spec-d-3',
+          question: `Can you collect on our practice's old, aged ${specialtyName} Accounts Receivable (AR)?`,
+          answer: `Yes. Our specialized Old AR Recovery team systematically works unresolved claims aged 60, 90, 120, and 180+ days. We re-open unresolved claims, challenge inappropriate denials, and recover revenue that in-house staff often don't have time to chase.`
+        },
+        {
+          id: 'spec-d-4',
+          question: `How do you keep Days in AR (DAR) strictly below 30 days for ${specialtyName}?`,
+          answer: `Through daily electronic claim status tracking, automated clearinghouse alerts, proactive follow-ups with commercial and government payer reps, and timely appeal submissions, we maintain average Days in AR strictly under 30 days.`
+        }
+      ]
+    },
+    {
+      id: 'spec-ehr',
+      title: 'EHR Systems & Practice Integration',
+      countLabel: '3 Questions',
+      questions: [
+        {
+          id: 'spec-e-1',
+          question: `Do we need to switch or replace our current ${specialtyName} EHR software?`,
+          answer: `No. You keep your existing EHR and practice management software. Our certified billers work natively inside Epic, AthenaHealth, Kareo/Tebra, AdvancedMD, Nextech, Modernizing Medicine (EMA), eClinicalWorks, NextGen, DrChrono, and all major platforms.`
+        },
+        {
+          id: 'spec-e-2',
+          question: `Will our physicians or clinical staff need to change how they chart encounters?`,
+          answer: `Not at all. Your providers continue charting exactly as they do today. Our billers extract necessary data directly from your completed clinical notes, encounter forms, or superbills without adding administrative burdens to your clinical team.`
+        },
+        {
+          id: 'spec-e-3',
+          question: `How does Ascent protect PHI and guarantee HIPAA compliance?`,
+          answer: `Ascent complies fully with HIPAA, HITECH, and SOC-2 guidelines. We sign comprehensive Business Associate Agreements (BAAs), employ encrypted VPN tunnels, strict role-based access controls, and multi-factor authentication.`
+        }
+      ]
+    },
+    {
+      id: 'spec-pricing',
+      title: 'Pricing, Onboarding & ROI',
+      countLabel: '4 Questions',
+      questions: [
+        {
+          id: 'spec-p-1',
+          question: `What is your fee model for ${specialtyName} billing services?`,
+          answer: `We work on a transparent, performance-based percentage of net monthly collections actually received in your bank account. There are zero upfront onboarding fees, zero IT setup costs, and no fees on unpaid or denied claims.`
+        },
+        {
+          id: 'spec-p-2',
+          question: `How quickly can our ${specialtyName} practice complete onboarding and go live?`,
+          answer: `Most ${specialtyName} practices go live within 3 to 5 business days. Our onboarding team handles EDI/ERA enrollment, clearinghouse routing, and EHR credentialing with zero disruption to your daily patient visits or cash flow.`
+        },
+        {
+          id: 'spec-p-3',
+          question: `What average revenue increase can a ${specialtyName} practice expect?`,
+          answer: `On average, practices that switch to Ascent see a 15% to 25% increase in total collected revenue within the first 90 days, driven by fewer denials, eliminated write-offs, faster AR collections, and accurate procedural coding.`
+        },
+        {
+          id: 'spec-p-4',
+          question: `What financial analytics and performance reporting do you provide?`,
+          answer: `You receive 24/7 access to real-time financial reporting dashboards showing net collection ratios, clean claim rates, provider productivity, aging AR buckets, and payer turnaround times, along with dedicated monthly strategy calls.`
+        }
+      ]
+    }
+  ];
+}
 
-  const activeCategory = faqData.find(cat => cat.id === activeCategoryId) || faqData[0];
+export interface FaqSectionProps {
+  specialtyName?: string;
+}
+
+export function FaqSection({ specialtyName }: FaqSectionProps = {}) {
+  const currentFaqData = specialtyName ? getFaqDataForSpecialty(specialtyName) : faqData;
+
+  const [activeCategoryId, setActiveCategoryId] = useState<string>(currentFaqData[0].id);
+  const [openQuestionId, setOpenQuestionId] = useState<string | null>(currentFaqData[0].questions[0].id);
+
+  // Synchronize category and question when specialtyName changes
+  React.useEffect(() => {
+    const data = specialtyName ? getFaqDataForSpecialty(specialtyName) : faqData;
+    setActiveCategoryId(data[0].id);
+    setOpenQuestionId(data[0].questions[0]?.id || null);
+  }, [specialtyName]);
+
+  const activeCategory = currentFaqData.find(cat => cat.id === activeCategoryId) || currentFaqData[0];
 
   const handleCategoryChange = (categoryId: string) => {
     setActiveCategoryId(categoryId);
-    const category = faqData.find(cat => cat.id === categoryId);
+    const category = currentFaqData.find(cat => cat.id === categoryId);
     if (category && category.questions.length > 0) {
       setOpenQuestionId(category.questions[0].id);
     } else {
@@ -192,17 +338,20 @@ export function FaqSection() {
           {/* Top Help & Information Pill Badge */}
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#154377]/20 bg-white shadow-xs text-[#154377] text-xs sm:text-[13px] font-bold tracking-wide uppercase mb-4">
             <HelpCircle className="w-4 h-4 text-[#98C340] stroke-[2.2]" />
-            <span>Help & Information</span>
+            <span>{specialtyName ? `${specialtyName} Billing FAQ` : 'Help & Information'}</span>
           </div>
 
           {/* Main Title */}
-          <h2 className="text-3xl sm:text-4xl lg:text-[44px] font-bold font-outfit text-[#154377] tracking-tight leading-tight mb-4">
+          <h2 className="text-3xl sm:text-4xl lg:text-[44px] font-semibold font-outfit text-[#154377] tracking-tight leading-tight mb-4">
             Frequently Asked <span className="text-[#98C340]">Questions</span>
           </h2>
 
           {/* Subtitle */}
           <p className="text-[#556987] text-[15px] sm:text-[17px] font-normal leading-relaxed max-w-2xl mx-auto">
-            Everything you need to know about partnering with Ascent Medical Billing, our 98% clean-claim workflows, transparent pricing, EHR integrations, and revenue cycle performance.
+            {specialtyName 
+              ? `Everything you need to know about our certified ${specialtyName} billing and coding workflows, 98%+ clean claims, prior authorizations, EHR integrations, and revenue cycle performance.`
+              : 'Everything you need to know about partnering with Ascent Medical Billing, our 98% clean-claim workflows, transparent pricing, EHR integrations, and revenue cycle performance.'
+            }
           </p>
         </div>
 
@@ -221,7 +370,7 @@ export function FaqSection() {
 
             {/* Category Cards List */}
             <div className="space-y-2.5">
-              {faqData.map((category) => {
+              {currentFaqData.map((category) => {
                 const isActive = activeCategoryId === category.id;
 
                 return (
@@ -276,19 +425,24 @@ export function FaqSection() {
 
             {/* Need More Assistance Card */}
             <div className="mt-6 p-5 rounded-xl bg-gradient-to-br from-[#154377] to-[#1a4f8b] text-white shadow-sm border border-white/15">
-              <h5 className="font-bold text-[15px] mb-1">Still Have Questions?</h5>
+              <h5 className="font-bold text-[15px] mb-1">
+                {specialtyName ? `Questions About ${specialtyName} Billing?` : 'Still Have Questions?'}
+              </h5>
               <p className="text-blue-100/90 text-xs leading-relaxed mb-3.5">
-                Our healthcare revenue specialists are ready to discuss your practice's specific billing needs.
+                {specialtyName 
+                  ? `Our certified ${specialtyName} revenue cycle specialists are ready to discuss your clinical documentation, coding, and collection goals.`
+                  : "Our healthcare revenue specialists are ready to discuss your practice's specific billing needs."
+                }
               </p>
               <button
                 onClick={() => {
-                  const el = document.getElementById('contact-section');
+                  const el = document.getElementById('consultation-form') || document.getElementById('contact-section');
                   el?.scrollIntoView({ behavior: 'smooth' });
                 }}
                 className="w-full inline-flex items-center justify-center gap-2 bg-[#98C340] hover:bg-[#88b335] text-white font-bold text-xs py-2.5 px-4 rounded-lg transition-all duration-200 shadow-xs cursor-pointer"
               >
                 <PhoneCall className="w-3.5 h-3.5" />
-                <span>Speak with an RCM Expert</span>
+                <span>{specialtyName ? `Speak with a ${specialtyName} RCM Expert` : 'Speak with an RCM Expert'}</span>
               </button>
             </div>
 

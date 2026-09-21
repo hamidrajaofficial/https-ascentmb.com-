@@ -24,7 +24,9 @@ export function ContactUsSection2() {
 
           {/* Left Form Side */}
           <div className="w-full md:w-1/2">
-            <h2 className="text-[42px] font-bold text-[#5143C2] mb-4">Let's talk</h2>
+            <h2 className="text-[42px] font-semibold text-[#154377] font-outfit mb-4">
+              Let's <span className="text-[#98C340]">Talk</span>
+            </h2>
             <p className="text-gray-500 mb-8 text-[15px] leading-relaxed max-w-[400px]">
               To request a quote or want to meet up for coffee, contact us directly or fill out the form and we will get back to you promptly.
             </p>

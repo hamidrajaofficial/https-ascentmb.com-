@@ -94,11 +94,12 @@ const usStates: UsStateData[] = [
   },
 ];
 
-interface NationwideAvailabilityProps {
+export interface NationwideAvailabilityProps {
   onFindNearYou?: () => void;
+  specialtyName?: string;
 }
 
-export function NationwideAvailability({ onFindNearYou }: NationwideAvailabilityProps) {
+export function NationwideAvailability({ onFindNearYou, specialtyName }: NationwideAvailabilityProps) {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [tappedCardId, setTappedCardId] = useState<string | null>(null);
 
@@ -155,17 +156,17 @@ export function NationwideAvailability({ onFindNearYou }: NationwideAvailability
               
               {/* Two-Tone Title (h2) */}
               <h2 className="!m-0 text-[#154377] font-outfit font-bold text-2xl md:text-3xl lg:text-[2.45rem] leading-tight">
-                Medical Billing Services Trusted by Healthcare Practices{' '}
+                {specialtyName ? `${specialtyName} Billing Services ` : 'Medical Billing Services '}Trusted by Healthcare Practices{' '}
                 <span className="text-[#98C340]">Across All 50 US States</span>
               </h2>
 
               {/* Descriptive Copy */}
               <div className="text-[#556987] leading-relaxed text-sm md:text-[15.5px] space-y-4 font-normal">
                 <p>
-                  Ascent Medical Billing provides specialized revenue cycle management tailored to state-specific Medicaid rules, regional Medicare Administrative Contractor (MAC) jurisdictions, and local commercial payer fee schedules. From California and Texas to New York, Florida, and Illinois, our certified medical coders and billing specialists ensure your claims comply with localized payer rules from day one.
+                  Ascent Medical Billing provides specialized revenue cycle management tailored to state-specific Medicaid rules, regional Medicare Administrative Contractor (MAC) jurisdictions, and local commercial payer fee schedules{specialtyName ? ` for ${specialtyName.toLowerCase()} practices` : ''}. From California and Texas to New York, Florida, and Illinois, our certified medical coders and billing specialists ensure your {specialtyName ? `${specialtyName.toLowerCase()} ` : ''}claims comply with localized payer rules from day one.
                 </p>
                 <p>
-                  Whether your practice operates as a solo specialty clinic, an urgent care facility, or a multi-provider ambulatory surgical center, our nationwide infrastructure ensures 98%+ first-pass clean claim rates and keeps Accounts Receivable (AR) strictly under 30 days. Partner with dedicated, AAPC/AHIMA-certified billing professionals who understand the regional healthcare landscape of your home state.
+                  Whether your practice operates as a solo {specialtyName ? `${specialtyName.toLowerCase()} clinic` : 'specialty clinic'}, an urgent care facility, or a multi-provider ambulatory surgical center, our nationwide infrastructure ensures 98%+ first-pass clean claim rates and keeps Accounts Receivable (AR) strictly under 30 days. Partner with dedicated, AAPC/AHIMA-certified billing professionals who understand the regional healthcare landscape of your home state.
                 </p>
               </div>
 

@@ -18,7 +18,12 @@ const softwareLogos = [
   "https://starbillingsolutions.com/wp-content/uploads/2025/12/medent-logo.webp"
 ];
 
-export function SolutionsCardsSection() {
+export interface SolutionsCardsSectionProps {
+  specialtyName?: string;
+  onCheckDetails?: () => void;
+}
+
+export function SolutionsCardsSection({ specialtyName, onCheckDetails }: SolutionsCardsSectionProps = {}) {
   return (
     <section className="relative overflow-hidden bg-[#154377]/[0.03] py-[80px]">
       {/* Background Image with Overlay */}
@@ -44,7 +49,9 @@ export function SolutionsCardsSection() {
             Medical Billing Software <span className="text-[#98C340]">We Are Experts In</span>
           </h2>
           <p className="text-[17px] opacity-90 max-w-3xl mx-auto mb-12 leading-relaxed font-normal">
-            Our certified billing experts are proficient in leading Electronic Health Record (EHR) and Practice Management systems. We seamlessly integrate with your existing technology to ensure accuracy, compliance, and accelerated reimbursements without disrupting your daily workflow.
+            {specialtyName 
+              ? `Our certified ${specialtyName.toLowerCase()} billing experts are proficient in leading Electronic Health Record (EHR) and Practice Management systems. We seamlessly integrate with your existing technology to ensure accuracy, compliance, and accelerated reimbursements without disrupting your daily workflow.`
+              : 'Our certified billing experts are proficient in leading Electronic Health Record (EHR) and Practice Management systems. We seamlessly integrate with your existing technology to ensure accuracy, compliance, and accelerated reimbursements without disrupting your daily workflow.'}
           </p>
           
           <div className="relative w-full overflow-hidden flex items-center py-4">
@@ -93,9 +100,13 @@ export function SolutionsCardsSection() {
 
           {/* Card 3 */}
           <div className="bg-white rounded-[8px] border border-gray-200 shadow-[0_2px_10px_rgba(0,0,0,0.05)] p-8 lg:p-10 relative overflow-hidden transition-transform duration-300 hover:-translate-y-2 hover:shadow-[0_8px_20px_rgba(0,0,0,0.1)] flex flex-col items-center text-center h-full z-20">
-             <h3 className="text-[22px] font-bold text-[#154377] mb-4">Specialty-Specific Software Management</h3>
+             <h3 className="text-[22px] font-bold text-[#154377] mb-4">
+               {specialtyName ? `${specialtyName} Software Management` : 'Specialty-Specific Software Management'}
+             </h3>
              <p className="text-gray-500 font-normal leading-relaxed text-[16px] flex-grow">
-               We provide customized software solutions tailored to the unique needs of your medical specialty. Beyond optimizing practice operations, our systems are designed to support your workflow, improve efficiency, and help you achieve better clinical and financial outcomes.
+               {specialtyName 
+                 ? `We provide customized software solutions tailored to the unique clinical workflows and billing nuances of your ${specialtyName.toLowerCase()} practice. Beyond optimizing practice operations, our systems are designed to support your workflow, improve efficiency, and help you achieve better clinical and financial outcomes.`
+                 : 'We provide customized software solutions tailored to the unique needs of your medical specialty. Beyond optimizing practice operations, our systems are designed to support your workflow, improve efficiency, and help you achieve better clinical and financial outcomes.'}
              </p>
              <Calendar className="absolute -bottom-4 -right-4 w-32 h-32 text-gray-50 opacity-[0.05] pointer-events-none" />
           </div>
@@ -104,7 +115,13 @@ export function SolutionsCardsSection() {
         
         {/* Check Details Button */}
         <div className="flex justify-center mt-12 mb-4 relative z-20">
-           <button className="bg-[#98C340] text-white font-bold px-8 py-3.5 rounded flex items-center justify-center gap-2 transition hover:bg-[#85ab36] shadow-md hover:shadow-lg cursor-pointer">
+           <button 
+             onClick={onCheckDetails || (() => {
+               const el = document.getElementById('contact-section') || document.getElementById('consultation-form');
+               el?.scrollIntoView({ behavior: 'smooth' });
+             })}
+             className="bg-[#98C340] text-white font-bold px-8 py-3.5 rounded flex items-center justify-center gap-2 transition hover:bg-[#85ab36] shadow-md hover:shadow-lg cursor-pointer"
+           >
               Check details
               <ArrowRight className="w-5 h-5 ml-1" />
            </button>

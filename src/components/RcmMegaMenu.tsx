@@ -191,10 +191,10 @@ export function RcmMegaMenu({ onClose, onSelectService }: RcmMegaMenuProps) {
           {/* 1. Left Column: Brand Highlight Box (3 cols) */}
           <div className="lg:col-span-3 xl:col-span-3 bg-[#154377] text-white rounded-2xl p-6 flex flex-col justify-between shadow-md h-full min-h-[340px]">
             <div>
-              <h2 className="text-2xl font-bold font-outfit leading-tight tracking-tight mb-3">
+              <h3 className="text-2xl font-bold font-outfit leading-tight tracking-tight mb-3">
                 All-in-One <br />
                 <span className="text-[#98C340]">RCM Growth</span>
-              </h2>
+              </h3>
               
               <p className="text-white/90 text-[13px] leading-relaxed mb-6 font-normal">
                 Comprehensive solutions: Medical Billing, Coding, Credentialing, Denial Management, and Audit strategies tailored for enterprise &amp; practice growth.

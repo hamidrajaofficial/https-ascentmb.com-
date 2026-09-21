@@ -68,7 +68,7 @@ export function FooterServicesPagesCta({
         
         {/* Main H2 Heading */}
         <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-[48px] font-bold font-outfit tracking-tight leading-tight mb-5 text-white">
-          {titleWhite} <span className="text-[#FBBF24]">{titleGold}</span>
+          {titleWhite} <span className="text-[#98C340]">{titleGold}</span>
         </h2>
 
         {/* Subtitle Paragraph */}

@@ -179,33 +179,6 @@ export function ServicesWhatYouWillGet({ onConsultation }: ServicesWhatYouWillGe
           </button>
         </div>
 
-        {/* Bottom Callout Banner */}
-        <div className="mt-12 bg-[#154377] rounded-[4px] p-6 sm:p-7 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-md border border-[#154377]">
-          <div className="text-center sm:text-left">
-            <h4 className="text-white text-lg sm:text-xl font-bold font-outfit mb-1">
-              Ready to eliminate claim denials and boost monthly practice collections?
-            </h4>
-            <p className="text-blue-100/85 text-[14px] font-normal">
-              Get a customized revenue cycle assessment and free billing audit from our certified RCM consultants.
-            </p>
-          </div>
-
-          <button
-            onClick={() => {
-              if (onConsultation) {
-                onConsultation();
-              } else {
-                const el = document.getElementById('consultation-form');
-                el?.scrollIntoView({ behavior: 'smooth' });
-              }
-            }}
-            className="shrink-0 inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-[4px] bg-[#98C340] hover:bg-[#85ab36] text-white font-bold text-sm transition-all shadow-sm hover:shadow-md cursor-pointer group"
-          >
-            <span>Claim Free Billing Audit</span>
-            <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-          </button>
-        </div>
-
       </div>
     </section>
   );

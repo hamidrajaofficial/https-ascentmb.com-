@@ -1,7 +1,11 @@
 import React from 'react';
 import { MapPin, Mail, Phone, Facebook, Twitter, Linkedin, Instagram, AlertTriangle } from 'lucide-react';
 
-export function ContactUsSection() {
+export interface ContactUsSectionProps {
+  specialtyName?: string;
+}
+
+export function ContactUsSection({ specialtyName }: ContactUsSectionProps = {}) {
   return (
     <section 
       id="contact-section"
@@ -19,8 +23,14 @@ export function ContactUsSection() {
           {/* Left Dark Box - Stretches top to bottom matching section height */}
           <div className="w-full xl:w-[480px] 2xl:w-[500px] shrink-0 bg-[#1c508a] text-white p-7 sm:p-8 lg:p-10 shadow-2xl z-20 relative flex flex-col justify-between my-0 rounded-[1px] border border-[#235d9e]/30">
             <div>
-              <h3 className="text-[28px] leading-tight font-bold font-outfit mb-3">Let's Talk About Your Revenue Cycle</h3>
-              <p className="text-[14px] text-gray-200 mb-6 leading-relaxed">Our billing specialists are ready to analyze your practice and show you exactly how much revenue you can recover.</p>
+              <h2 className="text-[28px] leading-tight font-bold font-outfit mb-3 text-white">
+                Let's Talk About Your <span className="text-[#98C340]">{specialtyName ? `${specialtyName} ` : ''}Revenue Cycle</span>
+              </h2>
+              <p className="text-[14px] text-gray-200 mb-6 leading-relaxed">
+                {specialtyName 
+                  ? `Our certified ${specialtyName} billing specialists are ready to analyze your practice and show you exactly how much revenue you can recover.`
+                  : 'Our billing specialists are ready to analyze your practice and show you exactly how much revenue you can recover.'}
+              </p>
               
               <div className="flex flex-col sm:flex-row sm:items-center gap-x-6 gap-y-2 mb-6">
                 <div className="flex items-center gap-2.5">
@@ -77,7 +87,9 @@ export function ContactUsSection() {
           {/* Right Form Box - Reduced height and compact spacing centered vertically */}
           <div className="w-full xl:flex-1 bg-white/95 backdrop-blur-sm border border-gray-100 shadow-2xl rounded-l-[12px] rounded-r-[1px] p-5 sm:p-6 lg:p-7 xl:py-7 xl:pr-8 xl:pl-[270px] 2xl:pl-[300px] xl:-ml-[180px] 2xl:-ml-[200px] relative z-10 flex flex-col justify-center my-6 xl:my-auto self-center">
             <div className="w-full max-w-[490px] mx-auto xl:mx-0 xl:ml-8 2xl:ml-12">
-              <h3 className="text-[24px] sm:text-[26px] font-bold text-[#154377] font-outfit mb-1">Schedule a Call Back with Our Billing Team</h3>
+              <h3 className="text-[24px] sm:text-[26px] font-bold text-[#154377] font-outfit mb-1">
+                Schedule a Call Back with Our {specialtyName ? `${specialtyName} ` : ''}Billing Team
+              </h3>
               <p className="text-gray-500 mb-4 text-[14px]">Feel free to drop us a line below!</p>
               
               <form className="space-y-3.5" onSubmit={(e) => e.preventDefault()}>
@@ -120,8 +132,11 @@ export function ContactUsSection() {
                 <div>
                   <label className="block text-[11px] font-bold text-[#8FA4C5] mb-1 uppercase tracking-wider">Please Select*</label>
                   <div className="relative">
-                    <select defaultValue="" className="w-full border border-gray-200 rounded-[6px] px-3.5 py-2.5 bg-white shadow-sm focus:outline-none focus:border-[#98C340] focus:ring-1 focus:ring-[#98C340] transition-all text-gray-400 focus:text-[#154377] text-[14px] appearance-none cursor-pointer">
+                    <select defaultValue={specialtyName ? "specialty-billing" : ""} className="w-full border border-gray-200 rounded-[6px] px-3.5 py-2.5 bg-white shadow-sm focus:outline-none focus:border-[#98C340] focus:ring-1 focus:ring-[#98C340] transition-all text-gray-400 focus:text-[#154377] text-[14px] appearance-none cursor-pointer">
                       <option value="" disabled>Please Select Specialty</option>
+                      {specialtyName && (
+                        <option value="specialty-billing" className="text-[#154377]">{specialtyName} Billing & Coding</option>
+                      )}
                       <option value="medical-billing" className="text-[#154377]">Medical Billing</option>
                       <option value="medical-coding" className="text-[#154377]">Medical Coding</option>
                       <option value="credentialing" className="text-[#154377]">Credentialing</option>
@@ -134,7 +149,7 @@ export function ContactUsSection() {
                 <div>
                   <label className="block text-[11px] font-bold text-[#8FA4C5] mb-1 uppercase tracking-wider">Message*</label>
                   <textarea 
-                    placeholder="Tell us about your billing challenges..." 
+                    placeholder={specialtyName ? `Tell us about your ${specialtyName.toLowerCase()} billing challenges...` : "Tell us about your billing challenges..."}
                     rows={2}
                     className="w-full border border-gray-200 rounded-[6px] px-3.5 py-2 bg-white shadow-sm focus:outline-none focus:border-[#98C340] focus:ring-1 focus:ring-[#98C340] transition-all text-[#154377] text-[14px] placeholder:text-gray-400 resize-none"
                   ></textarea>

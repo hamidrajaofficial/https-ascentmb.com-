@@ -41,8 +41,8 @@ export function InsuranceBillingCtaSection() {
 
           {/* Left Content Area */}
           <div className="w-full md:w-1/2 p-8 sm:p-10 lg:p-14 z-10 flex flex-col items-start justify-center">
-            <h2 className="text-2xl sm:text-3xl lg:text-[36px] font-bold text-white font-outfit mb-3 leading-tight tracking-tight drop-shadow-sm">
-              Insurance and Billing Assistance
+            <h2 className="text-2xl sm:text-3xl lg:text-[36px] font-semibold text-white font-outfit mb-3 leading-tight tracking-tight drop-shadow-sm">
+              Insurance and <span className="text-[#98C340]">Billing Assistance</span>
             </h2>
             
             <p className="text-white/90 text-sm sm:text-[15px] font-normal leading-relaxed mb-8 max-w-[480px]">

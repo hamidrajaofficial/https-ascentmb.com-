@@ -116,8 +116,8 @@ export function RcmOrbitSolutionsSection({
               </span>
 
               {/* Title */}
-              <h2 className="text-2xl sm:text-[27px] font-bold font-outfit text-white leading-[1.18] mb-3 drop-shadow-sm">
-                Revenue Cycle<br />Management<br />Solutions
+              <h2 className="text-2xl sm:text-[27px] font-semibold font-outfit text-white leading-[1.18] mb-3 drop-shadow-sm">
+                Revenue Cycle<br />Management<br /><span className="text-[#98C340]">Solutions</span>
               </h2>
 
               {/* Description */}

@@ -41,6 +41,7 @@ export interface SpecialtiesSectionProps {
   description?: string;
   customSpecialties?: SpecialtyItem[];
   id?: string;
+  onSelectSpecialty?: (specialtyName: string) => void;
 }
 
 export const defaultSpecialties: SpecialtyItem[] = [
@@ -93,6 +94,7 @@ export function SpecialtiesSection({
   description = 'Ascent Medical Billing offers a world where you can say goodbye to administrative headaches and costly billing errors. With our advanced automated medical billing systems and expert knowledge, we ensure faster reimbursements and improved cash flow while guaranteeing strict adherence to regulatory standards, including HIPAA compliance.',
   customSpecialties,
   id = 'specialties-section',
+  onSelectSpecialty,
 }: SpecialtiesSectionProps) {
   const [showAll, setShowAll] = useState(false);
 
@@ -155,6 +157,7 @@ export function SpecialtiesSection({
                       animate={{ opacity: 1, scale: 1 }}
                       exit={{ opacity: 0, scale: 0.8 }}
                       transition={{ duration: 0.3 }}
+                      onClick={() => onSelectSpecialty?.(specialty.name)}
                       className="w-[110px] h-[110px] flex flex-col justify-center items-center gap-2 bg-[#154377]/80 border border-transparent rounded-[8px] p-2 text-white hover:bg-[#98C340] transition duration-300 group cursor-pointer text-center flex-shrink-0 backdrop-blur-xs"
                     >
                       <Icon className="w-8 h-8 text-white group-hover:scale-110 transition-transform duration-300" strokeWidth={1.5} />

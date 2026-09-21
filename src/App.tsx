@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { MapPin, Mail, Phone, Facebook, Linkedin, Instagram, Twitter, ChevronDown, ChevronUp, Activity, Calendar, Headphones, Menu, X, ShieldCheck, FileText, Send, RotateCcw, BarChart3 } from 'lucide-react';
+import { MapPin, Mail, Phone, Facebook, Linkedin, Instagram, Twitter, ChevronDown, ChevronUp, Activity, Calendar, Headphones, Menu, X, ShieldCheck, FileText, Send, RotateCcw, BarChart3, ArrowRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ServicesSection } from './components/ServicesSection';
 import { WhatYouGetSection } from './components/WhatYouGetSection';
@@ -8,6 +8,7 @@ import { SolutionsCardsSection } from './components/SolutionsCardsSection';
 import { NationwideAvailability } from './components/NationwideAvailability';
 import { FutureInnovationSection } from './components/FutureInnovationSection';
 import { SpecialtiesSection } from './components/SpecialtiesSection';
+import { SpecialtiesMegaMenu, specialtiesList } from './components/SpecialtiesMegaMenu';
 import { RcmCompanySection } from './components/RcmCompanySection';
 import { RcmMegaMenu, rcmMegaMenuData } from './components/RcmMegaMenu';
 import { VirtualAssistantPackagesSection } from './components/VirtualAssistantPackagesSection';
@@ -19,6 +20,8 @@ import { Footer } from './components/Footer';
 import { StatsSection } from './components/StatsSection';
 import { FasterReimbursementsSection } from './components/FasterReimbursementsSection';
 import { MedicalBillingPage } from './pages/MedicalBillingPage';
+import { SpecialtyTemplatePage } from './pages/SpecialtyTemplatePage';
+import AboutUsPage from './pages/AboutUsPage';
 import logoImg from './assets/images/cropped-cropped-AA-300x178-1-2-removebg-preview.png';
 import heroHomeImg from './assets/images/End-to-End-Medical-Licensing-2026.webp';
 
@@ -56,38 +59,63 @@ const homeOnboardingSteps: OnboardingStep[] = [
 ];
 
 export default function App() {
-  const [currentPage, setCurrentPage] = useState<'home' | 'medical-billing'>(() => {
+  const [selectedSpecialty, setSelectedSpecialty] = useState<string>(() => {
+    if (typeof window !== 'undefined') {
+      const savedSpecialty = localStorage.getItem('ascent_active_specialty');
+      if (savedSpecialty) return savedSpecialty;
+    }
+    return 'Cardiology';
+  });
+
+  const [currentPage, setCurrentPage] = useState<'home' | 'medical-billing' | 'specialty' | 'about'>(() => {
     if (typeof window !== 'undefined') {
       const pathname = window.location.pathname.replace(/\/+$/, '');
       if (pathname === '/medical-billing' || pathname === '/services') return 'medical-billing';
+      if (pathname === '/about' || pathname === '/about-us') return 'about';
+      if (pathname.startsWith('/specialties') || pathname.startsWith('/specialty')) return 'specialty';
 
       const hash = window.location.hash.replace('#', '');
       if (hash === 'medical-billing' || hash === 'services') return 'medical-billing';
+      if (hash === 'about' || hash === 'about-us') return 'about';
+      if (hash.startsWith('specialt')) return 'specialty';
       if (hash === 'home') return 'home';
 
       const saved = localStorage.getItem('ascent_active_page');
-      if (saved === 'home' || saved === 'medical-billing') return saved;
+      if (saved === 'home' || saved === 'medical-billing' || saved === 'specialty' || saved === 'about') return saved;
     }
     return 'home';
   });
   const [isRcmMenuOpen, setIsRcmMenuOpen] = useState(false);
+  const [isSpecialtiesMenuOpen, setIsSpecialtiesMenuOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileRcmAccordion, setMobileRcmAccordion] = useState(false);
+  const [mobileSpecialtiesAccordion, setMobileSpecialtiesAccordion] = useState(false);
   const rcmTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const specialtiesTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
       localStorage.setItem('ascent_active_page', currentPage);
-      const targetPath = currentPage === 'medical-billing' ? '/medical-billing' : '/';
+      localStorage.setItem('ascent_active_specialty', selectedSpecialty);
+      
+      let targetPath = '/';
+      if (currentPage === 'medical-billing') {
+        targetPath = '/medical-billing';
+      } else if (currentPage === 'about') {
+        targetPath = '/about';
+      } else if (currentPage === 'specialty') {
+        const slug = selectedSpecialty.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+        targetPath = `/specialties/${slug}`;
+      }
       
       // Clean up any old hash and keep clean pathname
-      if (window.location.hash === '#medical-billing' || window.location.hash === '#services' || window.location.hash === '#home') {
-        window.history.replaceState({ page: currentPage }, '', targetPath);
+      if (window.location.hash.startsWith('#medical-billing') || window.location.hash.startsWith('#services') || window.location.hash === '#home') {
+        window.history.replaceState({ page: currentPage, specialty: selectedSpecialty }, '', targetPath);
       } else if (window.location.pathname !== targetPath) {
-        window.history.replaceState({ page: currentPage }, '', targetPath);
+        window.history.replaceState({ page: currentPage, specialty: selectedSpecialty }, '', targetPath);
       }
     }
-  }, [currentPage]);
+  }, [currentPage, selectedSpecialty]);
 
   useEffect(() => {
     const handleLocationChange = () => {
@@ -99,6 +127,27 @@ export default function App() {
         if (window.location.hash) {
           window.history.replaceState({ page: 'medical-billing' }, '', '/medical-billing');
         }
+      } else if (pathname === '/about' || pathname === '/about-us' || hash === 'about' || hash === 'about-us') {
+        setCurrentPage('about');
+        if (window.location.hash) {
+          window.history.replaceState({ page: 'about' }, '', '/about');
+        }
+      } else if (pathname.startsWith('/specialties') || pathname.startsWith('/specialty')) {
+        const parts = pathname.split('/');
+        const slug = parts[parts.length - 1];
+        if (slug && slug !== 'specialties' && slug !== 'specialty') {
+          // match specialty title from list or unslugify
+          const matched = specialtiesList.find(s => 
+            s.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') === slug
+          );
+          if (matched) {
+            setSelectedSpecialty(matched.name);
+          } else {
+            const formatted = slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+            setSelectedSpecialty(formatted);
+          }
+        }
+        setCurrentPage('specialty');
       } else if (pathname === '' || pathname === '/' || hash === 'home') {
         setCurrentPage('home');
       }
@@ -112,22 +161,41 @@ export default function App() {
     };
   }, []);
 
-  const navigateTo = (page: 'home' | 'medical-billing') => {
+  const navigateTo = (page: 'home' | 'medical-billing' | 'about') => {
     setCurrentPage(page);
     if (typeof window !== 'undefined') {
       localStorage.setItem('ascent_active_page', page);
-      const targetPath = page === 'medical-billing' ? '/medical-billing' : '/';
+      const targetPath = page === 'medical-billing' ? '/medical-billing' : page === 'about' ? '/about' : '/';
       if (window.location.pathname !== targetPath || window.location.hash) {
         window.history.pushState({ page }, '', targetPath);
       }
     }
     setIsRcmMenuOpen(false);
+    setIsSpecialtiesMenuOpen(false);
+    setMobileMenuOpen(false);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const navigateToSpecialty = (specialtyName: string) => {
+    setSelectedSpecialty(specialtyName);
+    setCurrentPage('specialty');
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('ascent_active_page', 'specialty');
+      localStorage.setItem('ascent_active_specialty', specialtyName);
+      const slug = specialtyName.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+      const targetPath = `/specialties/${slug}`;
+      window.history.pushState({ page: 'specialty', specialty: specialtyName }, '', targetPath);
+    }
+    setIsRcmMenuOpen(false);
+    setIsSpecialtiesMenuOpen(false);
     setMobileMenuOpen(false);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleRcmMouseEnter = () => {
     if (rcmTimeoutRef.current) clearTimeout(rcmTimeoutRef.current);
+    if (specialtiesTimeoutRef.current) clearTimeout(specialtiesTimeoutRef.current);
+    setIsSpecialtiesMenuOpen(false);
     setIsRcmMenuOpen(true);
   };
 
@@ -135,6 +203,40 @@ export default function App() {
     rcmTimeoutRef.current = setTimeout(() => {
       setIsRcmMenuOpen(false);
     }, 150);
+  };
+
+  const handleSpecialtiesMouseEnter = () => {
+    if (specialtiesTimeoutRef.current) clearTimeout(specialtiesTimeoutRef.current);
+    if (rcmTimeoutRef.current) clearTimeout(rcmTimeoutRef.current);
+    setIsRcmMenuOpen(false);
+    setIsSpecialtiesMenuOpen(true);
+  };
+
+  const handleSpecialtiesMouseLeave = () => {
+    specialtiesTimeoutRef.current = setTimeout(() => {
+      setIsSpecialtiesMenuOpen(false);
+    }, 150);
+  };
+
+  const handleHeaderMouseLeave = () => {
+    handleRcmMouseLeave();
+    handleSpecialtiesMouseLeave();
+  };
+
+  const scrollToSpecialties = () => {
+    setIsSpecialtiesMenuOpen(false);
+    setIsRcmMenuOpen(false);
+    setMobileMenuOpen(false);
+    
+    const el = document.getElementById('specialties-section');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      navigateTo('home');
+      setTimeout(() => {
+        document.getElementById('specialties-section')?.scrollIntoView({ behavior: 'smooth' });
+      }, 150);
+    }
   };
 
   return (
@@ -183,30 +285,31 @@ export default function App() {
       {/* --- Main Header --- */}
       <header 
         className="bg-[#FCFCFC] shadow-sm sticky top-0 z-50 h-[65px] flex items-center relative"
-        onMouseLeave={handleRcmMouseLeave}
+        onMouseLeave={handleHeaderMouseLeave}
       >
         <div className="max-w-[1250px] w-full mx-auto px-4 flex justify-between items-center h-full">
-          {/* Logo */}
-          <div 
+          {/* Logo linked to Home */}
+          <button 
             onClick={() => navigateTo('home')} 
-            className="flex items-center cursor-pointer group py-1"
+            className="flex items-center cursor-pointer group py-1 border-0 bg-transparent text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#98C340] rounded-md"
+            title="Ascent Medical Billing - Return to Home"
+            aria-label="Ascent Medical Billing Homepage"
           >
             <img 
               src={logoImg} 
               alt="Ascent Medical Billing" 
               className="h-10 sm:h-12 w-auto object-contain transition-transform duration-200 group-hover:scale-[1.02]" 
             />
-          </div>
+          </button>
 
           {/* Desktop Navigation */}
           <nav className="hidden xl:flex items-center space-x-4 2xl:space-x-5 text-[11px] font-bold text-[#233559] uppercase tracking-wide ml-auto mr-6 h-full">
             <button 
-              onClick={() => navigateTo('home')}
-              className={`hover:text-[#98C340] transition-colors py-4 cursor-pointer ${currentPage === 'home' ? 'text-[#98C340] border-b-2 border-[#98C340]' : ''}`}
+              onClick={() => navigateTo('about')}
+              className={`hover:text-[#98C340] transition-colors py-4 cursor-pointer ${currentPage === 'about' ? 'text-[#98C340] border-b-2 border-[#98C340]' : ''}`}
             >
-              HOME
+              ABOUT
             </button>
-            <a href="#" className="hover:text-[#98C340] transition-colors py-4">ABOUT</a>
             
             {/* RCM Services Dropdown with Mega Menu */}
             <div 
@@ -219,7 +322,17 @@ export default function App() {
               </div>
             </div>
 
-            <DropdownItem label="SPECIALITIES" />
+            {/* Specialties Dropdown with Mega Menu */}
+            <div 
+              className="h-full flex items-center cursor-pointer"
+              onMouseEnter={handleSpecialtiesMouseEnter}
+            >
+              <div className={`flex items-center space-x-1 transition-colors py-4 ${isSpecialtiesMenuOpen ? 'text-[#98C340]' : 'hover:text-[#98C340]'}`}>
+                <span>SPECIALITIES</span>
+                <ChevronDown size={14} strokeWidth={3} className={`transition-transform duration-200 ${isSpecialtiesMenuOpen ? 'rotate-180 text-[#98C340]' : 'text-[#7ea1c4]'}`} />
+              </div>
+            </div>
+
             <DropdownItem label="DOMAIN AREAS" />
             <DropdownItem label="OUR EHR EXPERTISE" />
             
@@ -253,7 +366,7 @@ export default function App() {
           </button>
         </div>
 
-        {/* Mega Menu Dropdown */}
+        {/* RCM Mega Menu Dropdown */}
         <AnimatePresence>
           {isRcmMenuOpen && (
             <div 
@@ -264,6 +377,24 @@ export default function App() {
                 onClose={() => setIsRcmMenuOpen(false)} 
                 onSelectService={(serviceId) => {
                   navigateTo('medical-billing');
+                }}
+              />
+            </div>
+          )}
+        </AnimatePresence>
+
+        {/* Specialties Mega Menu Dropdown */}
+        <AnimatePresence>
+          {isSpecialtiesMenuOpen && (
+            <div 
+              onMouseEnter={handleSpecialtiesMouseEnter}
+              onMouseLeave={handleSpecialtiesMouseLeave}
+            >
+              <SpecialtiesMegaMenu 
+                onClose={() => setIsSpecialtiesMenuOpen(false)} 
+                onViewAllSpecialties={scrollToSpecialties}
+                onSelectSpecialty={(name) => {
+                  navigateToSpecialty(name);
                 }}
               />
             </div>
@@ -281,13 +412,13 @@ export default function App() {
             >
               <div className="flex flex-col space-y-4 text-sm font-bold text-[#233559]">
                 <button 
-                  onClick={() => navigateTo('home')}
-                  className="py-2 text-left hover:text-[#98C340] border-b border-gray-100 uppercase"
+                  onClick={() => navigateTo('about')}
+                  className={`py-2 text-left hover:text-[#98C340] border-b border-gray-100 uppercase cursor-pointer ${currentPage === 'about' ? 'text-[#98C340] font-bold' : ''}`}
                 >
-                  HOME
+                  ABOUT
                 </button>
-                <a href="#" className="py-2 hover:text-[#98C340] border-b border-gray-100">ABOUT</a>
                 
+                {/* Mobile RCM SERVICES Accordion */}
                 <div>
                   <button 
                     onClick={() => setMobileRcmAccordion(!mobileRcmAccordion)}
@@ -318,7 +449,45 @@ export default function App() {
                   )}
                 </div>
 
-                <a href="#" className="py-2 hover:text-[#98C340] border-b border-gray-100">SPECIALITIES</a>
+                {/* Mobile SPECIALITIES Accordion */}
+                <div>
+                  <button 
+                    onClick={() => setMobileSpecialtiesAccordion(!mobileSpecialtiesAccordion)}
+                    className="w-full flex justify-between items-center py-2 text-[#154377] font-bold border-b border-gray-100 uppercase"
+                  >
+                    <span>SPECIALITIES</span>
+                    {mobileSpecialtiesAccordion ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                  </button>
+                  {mobileSpecialtiesAccordion && (
+                    <div className="pl-2 py-3 bg-[#F8FAF3] rounded-lg mt-2 p-3 border border-[#98C340]/20">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-3">
+                        {specialtiesList.map((item, idx) => {
+                          const IconComp = item.icon;
+                          return (
+                            <div 
+                              key={idx} 
+                              onClick={() => navigateToSpecialty(item.name)}
+                              className="flex items-center gap-2.5 p-2 bg-white rounded-lg border border-gray-100 shadow-xs cursor-pointer hover:border-[#98C340] active:bg-[#F8FAF3]"
+                            >
+                              <div className="w-8 h-8 rounded-md bg-[#EDF2F7] flex items-center justify-center shrink-0">
+                                <IconComp className="w-4 h-4 text-[#154377]" />
+                              </div>
+                              <span className="text-xs font-semibold text-[#154377] truncate">{item.name}</span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                      <button
+                        onClick={() => scrollToSpecialties()}
+                        className="w-full flex items-center justify-center gap-2 py-2.5 bg-[#98C340] hover:bg-[#85ab36] text-white text-xs font-bold rounded-lg transition-colors cursor-pointer shadow-sm"
+                      >
+                        <span>View All Specialties</span>
+                        <ArrowRight className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  )}
+                </div>
+
                 <a href="#" className="py-2 hover:text-[#98C340] border-b border-gray-100">DOMAIN AREAS</a>
                 <a href="#" className="py-2 hover:text-[#98C340] border-b border-gray-100">OUR EHR EXPERTISE</a>
                 <a href="#" className="py-2 hover:text-[#98C340] border-b border-gray-100">BLOG</a>
@@ -340,6 +509,17 @@ export default function App() {
       {/* --- Page Content Router --- */}
       {currentPage === 'medical-billing' ? (
         <MedicalBillingPage onBackToHome={() => navigateTo('home')} />
+      ) : currentPage === 'specialty' ? (
+        <SpecialtyTemplatePage 
+          specialtyName={selectedSpecialty} 
+          onBackToHome={() => navigateTo('home')} 
+          onSelectSpecialty={(name) => navigateToSpecialty(name)}
+        />
+      ) : currentPage === 'about' ? (
+        <AboutUsPage 
+          onBackToHome={() => navigateTo('home')}
+          onNavigateToMedicalBilling={() => navigateTo('medical-billing')}
+        />
       ) : (
         <>
           {/* --- Hero Section --- */}
@@ -380,7 +560,9 @@ export default function App() {
           
           <FutureInnovationSection />
           
-          <SpecialtiesSection />
+          <SpecialtiesSection 
+            onSelectSpecialty={(name) => navigateToSpecialty(name)}
+          />
           
           <FastOnboardingSection 
             titlePrefix="How We Work in"
@@ -423,6 +605,8 @@ export default function App() {
       <Footer 
         onNavigateToMedicalBilling={() => navigateTo('medical-billing')}
         onNavigateHome={() => navigateTo('home')}
+        onNavigateToAbout={() => navigateTo('about')}
+        onSelectSpecialty={(name) => navigateToSpecialty(name)}
       />
     </div>
   );
@@ -470,7 +654,7 @@ function HeroText() {
       
       <h1 className="mb-4 flex flex-col items-start font-outfit">
         <span className="text-[#154377] font-bold text-[34px] sm:text-[44px] lg:text-[50px] leading-[1.1]">
-          Medical Billing Company
+          Medical Billing <span className="text-[#98C340]">Company</span>
         </span>
         <span className="text-[#154377] font-normal mt-0.5 w-full flex items-center h-[1.3em] overflow-hidden whitespace-nowrap text-[26px] sm:text-[34px] md:text-[38px] leading-tight">
           <span className="text-[#98C340] font-bold mr-2.5">That</span>

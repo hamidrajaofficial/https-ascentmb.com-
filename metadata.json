@@ -1,6 +1,6 @@
 {
   "name": "ascentmb.com",
-  "description": "A medical billing company website home page.",
+  "description": "Comprehensive medical billing, revenue cycle management (RCM), and specialty-specific billing and coding web platform.",
   "requestFramePermissions": [],
   "majorCapabilities": [
     "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
