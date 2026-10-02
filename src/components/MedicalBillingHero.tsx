@@ -1,15 +1,24 @@
 import React from 'react';
-import { Calendar } from 'lucide-react';
+import { Calendar, ChevronRight, Home } from 'lucide-react';
 import heroDoctorsTeamImg from '../assets/images/hero_doctors_team_1787328070635.jpg';
 
 interface MedicalBillingHeroProps {
   onBookCall?: () => void;
   onAboutClick?: () => void;
+  serviceTitle?: string;
+  onNavigateToRcmServices?: () => void;
+  onNavigateHome?: () => void;
 }
 
-export function MedicalBillingHero({ onBookCall, onAboutClick }: MedicalBillingHeroProps) {
+export function MedicalBillingHero({ 
+  onBookCall, 
+  onAboutClick,
+  serviceTitle = "Medical Billing Services",
+  onNavigateToRcmServices,
+  onNavigateHome,
+}: MedicalBillingHeroProps) {
   return (
-    <section className="relative w-full overflow-hidden bg-[#154377] text-white pt-[30px] pb-28 sm:pb-32 lg:pb-36 mt-1">
+    <section className="relative w-full overflow-hidden bg-[#154377] text-white pt-[22px] pb-28 sm:pb-32 lg:pb-36 mt-1">
       
       {/* Background Doctor Team Photography with Navy Overlay */}
       <div 
@@ -27,6 +36,30 @@ export function MedicalBillingHero({ onBookCall, onAboutClick }: MedicalBillingH
 
       <div className="max-w-[1250px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
         
+        {/* Breadcrumb Navigation */}
+        <nav className="inline-flex items-center gap-1.5 sm:gap-2 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-xs text-[11px] sm:text-xs text-white/80 mb-6 border border-white/10">
+          <button 
+            type="button" 
+            onClick={onNavigateHome}
+            className="hover:text-[#98C340] transition-colors flex items-center gap-1 cursor-pointer"
+          >
+            <Home className="w-3 h-3" />
+            <span>Home</span>
+          </button>
+          <ChevronRight className="w-3 h-3 text-white/40" />
+          <button 
+            type="button" 
+            onClick={onNavigateToRcmServices}
+            className="hover:text-[#98C340] transition-colors cursor-pointer font-semibold text-white/90"
+          >
+            RCM Services
+          </button>
+          <ChevronRight className="w-3 h-3 text-white/40" />
+          <span className="text-[#98C340] font-bold truncate max-w-[200px]">
+            {serviceTitle}
+          </span>
+        </nav>
+
         {/* Eyebrow */}
         <div className="flex flex-col items-center mb-5">
           <div className="eyebrow text-white font-bold text-[13px] tracking-wider mb-3 text-center">
@@ -39,7 +72,7 @@ export function MedicalBillingHero({ onBookCall, onAboutClick }: MedicalBillingH
         <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[54px] font-extrabold text-white font-outfit leading-[1.18] tracking-tight max-w-5xl mx-auto mb-6">
           Professional{' '}
           <span className="text-[#98C340] font-bold">
-            Medical Billing Services
+            {serviceTitle}
           </span>{' '}
           That Boost Revenue &amp; Reduce Denials
         </h1>

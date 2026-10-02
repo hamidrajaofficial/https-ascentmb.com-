@@ -14,10 +14,25 @@ import logoImg from '../assets/images/cropped-cropped-AA-300x178-1-2-removebg-pr
 
 interface FooterProps {
   onNavigateToMedicalBilling?: () => void;
+  onNavigateToRcmServices?: () => void;
+  onNavigateToService?: (serviceSlug: string) => void;
   onNavigateHome?: () => void;
   onNavigateToAbout?: () => void;
   onSelectSpecialty?: (specialtyName: string) => void;
 }
+
+const serviceNameToSlug: Record<string, string> = {
+  'RCM Services': 'parent',
+  'Medical Billing': 'medical-billing',
+  'Medical Coding': 'medical-coding',
+  'Credentialing Services': 'medical-credentialing',
+  'Insurance Eligibility': 'eligibility-verification',
+  'Prior Authorization': 'medical-billing',
+  'Denial Management': 'denial-management',
+  'Analytics and Reporting': 'accounts-receivable',
+  'Patient Billing Services': 'patient-statement',
+  'Payment Posting Services': 'payment-posting',
+};
 
 const coreServices = [
   'RCM Services',
@@ -46,7 +61,9 @@ const topSpecialties = [
 ];
 
 export function Footer({ 
-  onNavigateToMedicalBilling, 
+  onNavigateToMedicalBilling,
+  onNavigateToRcmServices,
+  onNavigateToService,
   onNavigateHome, 
   onNavigateToAbout,
   onSelectSpecialty
@@ -141,17 +158,34 @@ export function Footer({
               Core Services
             </h4>
             <ul className="space-y-2.5 text-[13.5px] text-slate-300">
-              {coreServices.map((service, idx) => (
-                <li key={idx}>
-                  <button 
-                    onClick={onNavigateToMedicalBilling} 
-                    className="hover:text-white transition-colors flex items-center gap-2 cursor-pointer text-left group"
-                  >
-                    <ChevronRight className="w-3.5 h-3.5 text-[#98C340] shrink-0 group-hover:translate-x-0.5 transition-transform" />
-                    <span>{service}</span>
-                  </button>
-                </li>
-              ))}
+              {coreServices.map((service, idx) => {
+                const targetSlug = serviceNameToSlug[service];
+                const handleClick = () => {
+                  if (targetSlug === 'parent' || service === 'RCM Services') {
+                    if (onNavigateToRcmServices) {
+                      onNavigateToRcmServices();
+                    } else if (onNavigateToMedicalBilling) {
+                      onNavigateToMedicalBilling();
+                    }
+                  } else if (onNavigateToService && targetSlug) {
+                    onNavigateToService(targetSlug);
+                  } else if (onNavigateToMedicalBilling) {
+                    onNavigateToMedicalBilling();
+                  }
+                };
+
+                return (
+                  <li key={idx}>
+                    <button 
+                      onClick={handleClick} 
+                      className="hover:text-white transition-colors flex items-center gap-2 cursor-pointer text-left group"
+                    >
+                      <ChevronRight className="w-3.5 h-3.5 text-[#98C340] shrink-0 group-hover:translate-x-0.5 transition-transform" />
+                      <span>{service}</span>
+                    </button>
+                  </li>
+                );
+              })}
             </ul>
           </div>
 

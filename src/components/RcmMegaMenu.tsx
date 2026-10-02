@@ -156,24 +156,42 @@ export const rcmServicesList: ServiceDetail[] = [
   },
 ];
 
+export const serviceIdToSlug: Record<string, string> = {
+  billing: 'medical-billing',
+  coding: 'medical-coding',
+  credentialing: 'medical-credentialing',
+  denial: 'denial-management',
+  ar: 'accounts-receivable',
+  eligibility: 'eligibility-verification',
+  posting: 'payment-posting',
+  'patient-statement': 'patient-statement',
+  'digital-marketing': 'digital-marketing',
+  scheduling: 'scheduling',
+  'billing-audit': 'medical-billing-audit',
+  transcription: 'medical-transcription',
+};
+
 // Fallback exported data for mobile menu compatibility
 export const rcmMegaMenuData = rcmServicesList.map((s) => ({
   title: s.title,
+  slug: serviceIdToSlug[s.id] || s.id,
   items: s.expertiseList.slice(0, 3),
 }));
 
 interface RcmMegaMenuProps {
   onClose?: () => void;
-  onSelectService?: (serviceId: string) => void;
+  onSelectService?: (serviceSlug: string) => void;
+  onExploreAll?: () => void;
 }
 
-export function RcmMegaMenu({ onClose, onSelectService }: RcmMegaMenuProps) {
+export function RcmMegaMenu({ onClose, onSelectService, onExploreAll }: RcmMegaMenuProps) {
   const [activeService, setActiveService] = useState<ServiceDetail>(rcmServicesList[0]);
 
   const handleServiceClick = (service: ServiceDetail) => {
     setActiveService(service);
+    const slug = serviceIdToSlug[service.id] || service.id;
     if (onSelectService) {
-      onSelectService(service.id);
+      onSelectService(slug);
     }
   };
 
@@ -202,13 +220,18 @@ export function RcmMegaMenu({ onClose, onSelectService }: RcmMegaMenuProps) {
             </div>
 
             <div>
-              <a
-                href="#services"
-                onClick={onClose}
+              <button
+                type="button"
+                onClick={() => {
+                  if (onClose) onClose();
+                  if (onExploreAll) {
+                    onExploreAll();
+                  }
+                }}
                 className="inline-flex items-center justify-center w-full px-5 py-2.5 rounded-lg text-sm font-semibold text-white bg-[#98C340] hover:bg-[#85ab36] transition-all duration-200 cursor-pointer shadow-sm text-center"
               >
                 Explore All Services
-              </a>
+              </button>
             </div>
           </div>
 
@@ -288,7 +311,7 @@ export function RcmMegaMenu({ onClose, onSelectService }: RcmMegaMenuProps) {
                   type="button"
                   onClick={() => {
                     if (onClose) onClose();
-                    onSelectService?.('billing');
+                    onSelectService?.('medical-billing');
                   }}
                   className="w-full inline-flex items-center justify-center py-3.5 px-6 bg-[#98C340] hover:bg-[#85ab36] text-white text-[17px] font-bold rounded-[6px] border border-[#7ea72d] shadow-md transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
                 >
