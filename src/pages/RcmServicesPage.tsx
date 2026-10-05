@@ -16,15 +16,21 @@ interface RcmServicesPageProps {
   onBackToHome?: () => void;
   onSelectSpecialty?: (specialtyName: string) => void;
   onNavigateToService?: (serviceSlug: string) => void;
+  onNavigateToContact?: () => void;
 }
 
 export function RcmServicesPage({ 
   onBackToHome, 
   onSelectSpecialty,
-  onNavigateToService
+  onNavigateToService,
+  onNavigateToContact
 }: RcmServicesPageProps) {
   
   const scrollToConsultation = () => {
+    if (onNavigateToContact) {
+      onNavigateToContact();
+      return;
+    }
     const el = document.getElementById('consultation-form') || document.getElementById('contact-section');
     el?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -34,14 +40,14 @@ export function RcmServicesPage({
       
       {/* 1. Hero Section (Designed specifically for RCM Services parent page) */}
       <RcmHeroSection 
-        onBookCall={scrollToConsultation}
+        onBookCall={onNavigateToContact || scrollToConsultation}
         onAuditClick={scrollToConsultation}
       />
 
       {/* 2. Reliable Medical Billing Services That Reduce Claim Denials */}
       <ReliableBillingSection 
-        onBookCall={scrollToConsultation}
-        onConsultation={scrollToConsultation}
+        onBookCall={onNavigateToContact || scrollToConsultation}
+        onConsultation={onNavigateToContact || scrollToConsultation}
       />
 
       {/* 2.5. What We Do - Overview of Medical Billing Services in the USA */}

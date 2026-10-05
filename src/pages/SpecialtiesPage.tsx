@@ -8,15 +8,21 @@ export interface SpecialtiesPageProps {
   onBackToHome?: () => void;
   onSelectSpecialty?: (specialtyName: string) => void;
   onNavigateToRcmServices?: () => void;
+  onNavigateToContact?: () => void;
 }
 
 export function SpecialtiesPage({
   onBackToHome,
   onSelectSpecialty,
-  onNavigateToRcmServices
+  onNavigateToRcmServices,
+  onNavigateToContact
 }: SpecialtiesPageProps) {
 
   const scrollToAudit = () => {
+    if (onNavigateToContact) {
+      onNavigateToContact();
+      return;
+    }
     const el = document.getElementById('consultation-form') || document.getElementById('specialty-appointment-form');
     el?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -48,7 +54,7 @@ export function SpecialtiesPage({
 
       {/* 1. Hero Section (Specialties ka hero section with lead capture / consultation form) */}
       <SpecialtiesHeroSection 
-        onBookCall={scrollToAudit}
+        onBookCall={onNavigateToContact || scrollToAudit}
         onAuditClick={scrollToAudit}
         onBrowseCards={scrollToCards}
       />

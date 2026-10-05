@@ -25,6 +25,7 @@ import { SpecialtiesPage } from './pages/SpecialtiesPage';
 import { DomainAreasPage } from './pages/DomainAreasPage';
 import { SpecialtyTemplatePage } from './pages/SpecialtyTemplatePage';
 import AboutUsPage from './pages/AboutUsPage';
+import { ContactUsPage } from './pages/ContactUsPage';
 import logoImg from './assets/images/cropped-cropped-AA-300x178-1-2-removebg-preview.png';
 import heroHomeImg from './assets/images/End-to-End-Medical-Licensing-2026.webp';
 
@@ -83,7 +84,7 @@ export default function App() {
     return 'medical-billing';
   });
 
-  const [currentPage, setCurrentPage] = useState<'home' | 'rcm-services' | 'medical-billing' | 'specialties' | 'specialty' | 'domain-areas' | 'about'>(() => {
+  const [currentPage, setCurrentPage] = useState<'home' | 'rcm-services' | 'medical-billing' | 'specialties' | 'specialty' | 'domain-areas' | 'about' | 'contact'>(() => {
     if (typeof window !== 'undefined') {
       const pathname = window.location.pathname.replace(/\/+$/, '');
       const hash = window.location.hash.replace('#', '');
@@ -92,13 +93,14 @@ export default function App() {
       if (pathname.startsWith('/rcm-services/')) return 'medical-billing';
       if (pathname === '/medical-billing' || pathname === '/services' || hash === 'medical-billing' || hash === 'services') return 'medical-billing';
       if (pathname === '/about' || pathname === '/about-us' || hash === 'about' || hash === 'about-us') return 'about';
+      if (pathname === '/contact' || pathname === '/contact-us' || hash === 'contact' || hash === 'contact-us') return 'contact';
       if (pathname === '/domain-areas' || pathname === '/locations' || hash === 'domain-areas' || hash === 'locations') return 'domain-areas';
       if (pathname === '/specialties' || pathname === '/specialty' || hash === 'specialties' || hash === 'specialty') return 'specialties';
       if (pathname.startsWith('/specialties/') || pathname.startsWith('/specialty/') || hash.startsWith('specialt')) return 'specialty';
       if (hash === 'home') return 'home';
 
       const saved = localStorage.getItem('ascent_active_page');
-      if (saved === 'home' || saved === 'rcm-services' || saved === 'medical-billing' || saved === 'specialties' || saved === 'specialty' || saved === 'domain-areas' || saved === 'about') return saved as any;
+      if (saved === 'home' || saved === 'rcm-services' || saved === 'medical-billing' || saved === 'specialties' || saved === 'specialty' || saved === 'domain-areas' || saved === 'about' || saved === 'contact') return saved as any;
     }
     return 'home';
   });
@@ -127,13 +129,15 @@ export default function App() {
         targetPath = `/rcm-services/${currentServiceSlug || 'medical-billing'}`;
       } else if (currentPage === 'about') {
         targetPath = '/about';
+      } else if (currentPage === 'contact') {
+        targetPath = '/contact';
       } else if (currentPage === 'specialty') {
         const slug = selectedSpecialty.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
         targetPath = `/specialties/${slug}`;
       }
       
       // Clean up any old hash and keep clean pathname
-      if (window.location.hash.startsWith('#medical-billing') || window.location.hash.startsWith('#services') || window.location.hash.startsWith('#rcm-services') || window.location.hash.startsWith('#specialt') || window.location.hash.startsWith('#domain-areas') || window.location.hash.startsWith('#locations') || window.location.hash === '#home') {
+      if (window.location.hash.startsWith('#medical-billing') || window.location.hash.startsWith('#services') || window.location.hash.startsWith('#rcm-services') || window.location.hash.startsWith('#specialt') || window.location.hash.startsWith('#domain-areas') || window.location.hash.startsWith('#locations') || window.location.hash.startsWith('#contact') || window.location.hash === '#home') {
         window.history.replaceState({ page: currentPage, specialty: selectedSpecialty, service: currentServiceSlug }, '', targetPath);
       } else if (window.location.pathname !== targetPath) {
         window.history.replaceState({ page: currentPage, specialty: selectedSpecialty, service: currentServiceSlug }, '', targetPath);
@@ -167,6 +171,11 @@ export default function App() {
         setCurrentPage('about');
         if (window.location.hash) {
           window.history.replaceState({ page: 'about' }, '', '/about');
+        }
+      } else if (pathname === '/contact' || pathname === '/contact-us' || hash === 'contact' || hash === 'contact-us') {
+        setCurrentPage('contact');
+        if (window.location.hash) {
+          window.history.replaceState({ page: 'contact' }, '', '/contact');
         }
       } else if (pathname === '/domain-areas' || pathname === '/locations' || hash === 'domain-areas' || hash === 'locations') {
         setCurrentPage('domain-areas');
@@ -209,7 +218,7 @@ export default function App() {
     };
   }, []);
 
-  const navigateTo = (page: 'home' | 'rcm-services' | 'medical-billing' | 'specialties' | 'domain-areas' | 'about') => {
+  const navigateTo = (page: 'home' | 'rcm-services' | 'medical-billing' | 'specialties' | 'domain-areas' | 'about' | 'contact') => {
     setCurrentPage(page);
     if (typeof window !== 'undefined') {
       localStorage.setItem('ascent_active_page', page);
@@ -224,6 +233,8 @@ export default function App() {
         targetPath = `/rcm-services/${currentServiceSlug || 'medical-billing'}`;
       } else if (page === 'about') {
         targetPath = '/about';
+      } else if (page === 'contact') {
+        targetPath = '/contact';
       }
       if (window.location.pathname !== targetPath || window.location.hash) {
         window.history.pushState({ page }, '', targetPath);
@@ -429,18 +440,19 @@ export default function App() {
             
             <a href="#" className="hover:text-[#98C340] transition-colors py-4">BLOG</a>
             
-            <DropdownItem label="HIRE NOW" />
+            <button 
+              type="button"
+              onClick={() => navigateTo('contact')}
+              className={`hover:text-[#98C340] transition-colors py-4 border-0 bg-transparent cursor-pointer font-bold ${currentPage === 'contact' ? 'text-[#98C340] border-b-2 border-[#98C340]' : ''}`}
+            >
+              CONTACT US
+            </button>
           </nav>
 
           {/* CTA Button */}
           <div className="hidden lg:flex ml-4 h-full">
             <button 
-              onClick={() => {
-                navigateToService('medical-billing');
-                setTimeout(() => {
-                  document.getElementById('consultation-form')?.scrollIntoView({ behavior: 'smooth' });
-                }, 100);
-              }}
+              onClick={() => navigateTo('contact')}
               className="bg-[#98C340] hover:bg-[#85ab36] text-white px-5 h-full rounded-none text-[15px] font-semibold transition-colors flex items-center shadow-md cursor-pointer"
             >
               <Calendar className="w-4 h-4 mr-2" />
@@ -610,10 +622,15 @@ export default function App() {
                 </button>
                 <a href="#" className="py-2 hover:text-[#98C340] border-b border-gray-100">OUR EHR EXPERTISE</a>
                 <a href="#" className="py-2 hover:text-[#98C340] border-b border-gray-100">BLOG</a>
-                <a href="#" className="py-2 hover:text-[#98C340] border-b border-gray-100">HIRE NOW</a>
+                <button 
+                  onClick={() => navigateTo('contact')}
+                  className="w-full py-2 hover:text-[#98C340] border-b border-gray-100 flex items-center justify-between uppercase cursor-pointer text-left font-bold text-[#154377]"
+                >
+                  <span>CONTACT US</span>
+                </button>
 
                 <button 
-                  onClick={() => navigateToService('medical-billing')}
+                  onClick={() => navigateTo('contact')}
                   className="w-full mt-4 bg-[#98C340] hover:bg-[#85ab36] text-white py-3 rounded text-sm font-semibold flex items-center justify-center cursor-pointer shadow-sm transition-colors"
                 >
                   <Calendar className="w-4 h-4 mr-2" />
@@ -631,12 +648,14 @@ export default function App() {
           onBackToHome={() => navigateTo('home')}
           onSelectSpecialty={(name) => navigateToSpecialty(name)}
           onNavigateToService={(slug) => navigateToService(slug)}
+          onNavigateToContact={() => navigateTo('contact')}
         />
       ) : currentPage === 'specialties' ? (
         <SpecialtiesPage 
           onBackToHome={() => navigateTo('home')}
           onSelectSpecialty={(name) => navigateToSpecialty(name)}
           onNavigateToRcmServices={() => navigateTo('rcm-services')}
+          onNavigateToContact={() => navigateTo('contact')}
         />
       ) : currentPage === 'domain-areas' ? (
         <DomainAreasPage 
@@ -651,6 +670,7 @@ export default function App() {
           onBackToHome={() => navigateTo('home')} 
           onNavigateToRcmServices={() => navigateTo('rcm-services')}
           onSelectSpecialty={(name) => navigateToSpecialty(name)}
+          onNavigateToContact={() => navigateTo('contact')}
         />
       ) : currentPage === 'specialty' ? (
         <SpecialtyTemplatePage 
@@ -663,6 +683,12 @@ export default function App() {
         <AboutUsPage 
           onBackToHome={() => navigateTo('home')}
           onNavigateToMedicalBilling={() => navigateToService('medical-billing')}
+        />
+      ) : currentPage === 'contact' ? (
+        <ContactUsPage 
+          onBackToHome={() => navigateTo('home')}
+          onNavigateToSpecialties={() => navigateTo('specialties')}
+          onNavigateToServices={() => navigateTo('rcm-services')}
         />
       ) : (
         <>
@@ -679,7 +705,10 @@ export default function App() {
             <div className="max-w-[1250px] mx-auto px-4 w-full h-full flex flex-col lg:flex-row items-center relative z-10 pt-[36px] pb-[250px] sm:pb-[200px] md:pb-[180px]">
               
               {/* Left Content Area */}
-              <HeroText />
+              <HeroText 
+                onBookCall={() => navigateTo('contact')}
+                onContactUs={() => navigateTo('contact')}
+              />
 
               {/* Right Visual Area */}
               <div className="w-full lg:w-2/5 flex items-center justify-center lg:justify-end mt-16 lg:mt-0 relative z-10">
@@ -754,6 +783,7 @@ export default function App() {
         onNavigateToRcmServices={() => navigateTo('rcm-services')}
         onNavigateToSpecialties={() => navigateTo('specialties')}
         onNavigateToDomainAreas={() => navigateTo('domain-areas')}
+        onNavigateToContact={() => navigateTo('contact')}
         onNavigateToService={(slug) => navigateToService(slug)}
         onNavigateHome={() => navigateTo('home')}
         onNavigateToAbout={() => navigateTo('about')}
@@ -783,7 +813,7 @@ export function EyebrowBadge({ text, icon }: { text: string, icon?: React.ReactN
   );
 }
 
-function HeroText() {
+function HeroText({ onBookCall, onContactUs }: { onBookCall?: () => void; onContactUs?: () => void }) {
   const [index, setIndex] = useState(0);
   const phrases = ["Maximizes Revenue", "Reduces Claim Losses", "Built to Deliver Results"];
 
@@ -833,11 +863,17 @@ function HeroText() {
       </p>
       
       <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-4">
-        <button className="w-full sm:w-auto bg-[#98C340] hover:bg-[#85ab36] text-white font-semibold py-3.5 px-8 rounded-md text-[15px] sm:text-base transition-colors cursor-pointer shadow-md flex justify-center items-center">
+        <button 
+          onClick={onBookCall}
+          className="w-full sm:w-auto bg-[#98C340] hover:bg-[#85ab36] text-white font-semibold py-3.5 px-8 rounded-md text-[15px] sm:text-base transition-colors cursor-pointer shadow-md flex justify-center items-center"
+        >
           <Calendar className="w-5 h-5 mr-2" />
           Book Your Game Plan Call
         </button>
-        <button className="w-full sm:w-auto bg-[#154377] hover:bg-[#0f3259] text-white font-bold py-3.5 px-8 rounded-md uppercase tracking-wide text-sm transition-colors cursor-pointer shadow-md flex justify-center items-center">
+        <button 
+          onClick={onContactUs}
+          className="w-full sm:w-auto bg-[#154377] hover:bg-[#0f3259] text-white font-bold py-3.5 px-8 rounded-md uppercase tracking-wide text-sm transition-colors cursor-pointer shadow-md flex justify-center items-center"
+        >
           CONTACT US
         </button>
       </div>

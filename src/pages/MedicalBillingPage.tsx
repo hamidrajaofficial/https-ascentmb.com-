@@ -18,6 +18,7 @@ interface MedicalBillingPageProps {
   onBackToHome?: () => void;
   onNavigateToRcmServices?: () => void;
   onSelectSpecialty?: (specialtyName: string) => void;
+  onNavigateToContact?: () => void;
   serviceSlug?: string;
 }
 
@@ -40,12 +41,17 @@ export function MedicalBillingPage({
   onBackToHome,
   onNavigateToRcmServices,
   onSelectSpecialty,
+  onNavigateToContact,
   serviceSlug = 'medical-billing'
 }: MedicalBillingPageProps) {
   
   const serviceTitle = slugToTitleMap[serviceSlug] || 'Medical Billing Services';
 
   const scrollToConsultation = () => {
+    if (onNavigateToContact) {
+      onNavigateToContact();
+      return;
+    }
     const el = document.getElementById('consultation-form') || document.getElementById('contact-section');
     el?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -58,7 +64,7 @@ export function MedicalBillingPage({
         serviceTitle={serviceTitle}
         onNavigateHome={onBackToHome}
         onNavigateToRcmServices={onNavigateToRcmServices}
-        onBookCall={scrollToConsultation}
+        onBookCall={onNavigateToContact || scrollToConsultation}
         onAboutClick={onNavigateToRcmServices}
       />
 
