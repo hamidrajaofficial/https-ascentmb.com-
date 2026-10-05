@@ -14,7 +14,6 @@ import {
   ExternalLink
 } from 'lucide-react';
 import { TestimonialsSection } from '../components/TestimonialsSection';
-import { GotQuestionsAuditSection } from '../components/GotQuestionsAuditSection';
 
 export interface ContactUsPageProps {
   onBackToHome?: () => void;
@@ -530,11 +529,6 @@ export function ContactUsPage({
       {/* 4. REVIEWS SECTION (From Services Page)                 */}
       {/* ======================================================== */}
       <TestimonialsSection />
-
-      {/* ======================================================== */}
-      {/* 5. FAQ SECTION WITH AUDIT (From Services Page)           */}
-      {/* ======================================================== */}
-      <GotQuestionsAuditSection />
 
     </div>
   );
