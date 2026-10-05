@@ -1,4 +1,5 @@
 import React from 'react';
+import { ChevronRight, Home } from 'lucide-react';
 import { SpecialtyHero } from '../components/SpecialtyHero';
 import { StatsSection } from '../components/StatsSection';
 import { SoundFamiliarSection } from '../components/SoundFamiliarSection';
@@ -15,17 +16,45 @@ import { FaqSection } from '../components/FaqSection';
 export interface SpecialtyPageProps {
   specialtyName?: string;
   onBackToHome?: () => void;
+  onNavigateToSpecialties?: () => void;
   onSelectSpecialty?: (specialty: string) => void;
 }
 
 export function SpecialtyTemplatePage({ 
   specialtyName = "Cardiology",
   onBackToHome,
+  onNavigateToSpecialties,
   onSelectSpecialty
 }: SpecialtyPageProps) {
   return (
     <div className="w-full min-h-screen bg-white">
       
+      {/* Breadcrumb Navigation Bar */}
+      <div className="w-full bg-[#f4f7fa] border-b border-gray-200/70 py-2.5 px-4 sm:px-6">
+        <div className="max-w-[1250px] mx-auto flex items-center gap-2 text-xs sm:text-[13px] text-gray-500 font-medium">
+          <button 
+            onClick={onBackToHome}
+            className="flex items-center gap-1 text-[#154377] hover:text-[#98C340] transition-colors cursor-pointer"
+          >
+            <Home className="w-3.5 h-3.5" />
+            <span>Home</span>
+          </button>
+          
+          <ChevronRight className="w-3.5 h-3.5 text-gray-400" />
+          
+          <button 
+            onClick={onNavigateToSpecialties}
+            className="text-[#154377] hover:text-[#98C340] transition-colors cursor-pointer font-medium"
+          >
+            Specialties
+          </button>
+          
+          <ChevronRight className="w-3.5 h-3.5 text-gray-400" />
+          
+          <span className="text-[#154377] font-semibold">{specialtyName}</span>
+        </div>
+      </div>
+
       {/* 1. Hero Section */}
       <SpecialtyHero 
         specialtyPillText="AI-DRIVEN REVENUE CYCLE OPTIMIZATION & CLEAN CLAIMS"

@@ -96,10 +96,11 @@ const usStates: UsStateData[] = [
 
 export interface NationwideAvailabilityProps {
   onFindNearYou?: () => void;
+  onExploreAllLocations?: () => void;
   specialtyName?: string;
 }
 
-export function NationwideAvailability({ onFindNearYou, specialtyName }: NationwideAvailabilityProps) {
+export function NationwideAvailability({ onFindNearYou, onExploreAllLocations, specialtyName }: NationwideAvailabilityProps) {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [tappedCardId, setTappedCardId] = useState<string | null>(null);
 
@@ -126,6 +127,10 @@ export function NationwideAvailability({ onFindNearYou, specialtyName }: Nationw
   };
 
   const handleScrollToContact = () => {
+    if (onExploreAllLocations) {
+      onExploreAllLocations();
+      return;
+    }
     if (onFindNearYou) {
       onFindNearYou();
       return;

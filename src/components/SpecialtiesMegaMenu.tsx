@@ -230,8 +230,8 @@ export function SpecialtiesMegaMenu({
             </div>
 
             <div>
-              <a
-                href="#specialties-section"
+              <button
+                type="button"
                 onClick={() => {
                   if (onViewAllSpecialties) onViewAllSpecialties();
                   if (onClose) onClose();
@@ -239,7 +239,7 @@ export function SpecialtiesMegaMenu({
                 className="inline-flex items-center justify-center w-full px-5 py-2.5 rounded-lg text-sm font-semibold text-white bg-[#98C340] hover:bg-[#85ab36] transition-all duration-200 cursor-pointer shadow-sm text-center"
               >
                 Explore All Specialties
-              </a>
+              </button>
             </div>
           </div>
 

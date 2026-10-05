@@ -15,6 +15,8 @@ import logoImg from '../assets/images/cropped-cropped-AA-300x178-1-2-removebg-pr
 interface FooterProps {
   onNavigateToMedicalBilling?: () => void;
   onNavigateToRcmServices?: () => void;
+  onNavigateToSpecialties?: () => void;
+  onNavigateToDomainAreas?: () => void;
   onNavigateToService?: (serviceSlug: string) => void;
   onNavigateHome?: () => void;
   onNavigateToAbout?: () => void;
@@ -63,6 +65,8 @@ const topSpecialties = [
 export function Footer({ 
   onNavigateToMedicalBilling,
   onNavigateToRcmServices,
+  onNavigateToSpecialties,
+  onNavigateToDomainAreas,
   onNavigateToService,
   onNavigateHome, 
   onNavigateToAbout,
@@ -235,11 +239,20 @@ export function Footer({
               </li>
               <li>
                 <button 
-                  onClick={() => handleSpecialtyClick('Cardiology')} 
+                  onClick={onNavigateToSpecialties || (() => handleSpecialtyClick('Cardiology'))} 
                   className="hover:text-white transition-colors flex items-center gap-2 cursor-pointer text-left group"
                 >
                   <ChevronRight className="w-3.5 h-3.5 text-[#98C340] shrink-0 group-hover:translate-x-0.5 transition-transform" />
                   <span>Specialties</span>
+                </button>
+              </li>
+              <li>
+                <button 
+                  onClick={onNavigateToDomainAreas || scrollToAudit} 
+                  className="hover:text-white transition-colors flex items-center gap-2 cursor-pointer text-left group"
+                >
+                  <ChevronRight className="w-3.5 h-3.5 text-[#98C340] shrink-0 group-hover:translate-x-0.5 transition-transform" />
+                  <span>Domain Areas (Locations)</span>
                 </button>
               </li>
               <li>
