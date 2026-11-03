@@ -26,6 +26,7 @@ import { DomainAreasPage } from './pages/DomainAreasPage';
 import { SpecialtyTemplatePage } from './pages/SpecialtyTemplatePage';
 import AboutUsPage from './pages/AboutUsPage';
 import { ContactUsPage } from './pages/ContactUsPage';
+import { EhrExpertisePage } from './pages/EhrExpertisePage';
 import logoImg from './assets/images/cropped-cropped-AA-300x178-1-2-removebg-preview.png';
 import heroHomeImg from './assets/images/End-to-End-Medical-Licensing-2026.webp';
 
@@ -84,7 +85,7 @@ export default function App() {
     return 'medical-billing';
   });
 
-  const [currentPage, setCurrentPage] = useState<'home' | 'rcm-services' | 'medical-billing' | 'specialties' | 'specialty' | 'domain-areas' | 'about' | 'contact'>(() => {
+  const [currentPage, setCurrentPage] = useState<'home' | 'rcm-services' | 'medical-billing' | 'specialties' | 'specialty' | 'domain-areas' | 'about' | 'contact' | 'ehr-expertise'>(() => {
     if (typeof window !== 'undefined') {
       const pathname = window.location.pathname.replace(/\/+$/, '');
       const hash = window.location.hash.replace('#', '');
@@ -94,13 +95,14 @@ export default function App() {
       if (pathname === '/medical-billing' || pathname === '/services' || hash === 'medical-billing' || hash === 'services') return 'medical-billing';
       if (pathname === '/about' || pathname === '/about-us' || hash === 'about' || hash === 'about-us') return 'about';
       if (pathname === '/contact' || pathname === '/contact-us' || hash === 'contact' || hash === 'contact-us') return 'contact';
+      if (pathname === '/ehr-expertise' || pathname === '/our-ehr-expertise' || hash === 'ehr-expertise' || hash === 'our-ehr-expertise') return 'ehr-expertise';
       if (pathname === '/domain-areas' || pathname === '/locations' || hash === 'domain-areas' || hash === 'locations') return 'domain-areas';
       if (pathname === '/specialties' || pathname === '/specialty' || hash === 'specialties' || hash === 'specialty') return 'specialties';
       if (pathname.startsWith('/specialties/') || pathname.startsWith('/specialty/') || hash.startsWith('specialt')) return 'specialty';
       if (hash === 'home') return 'home';
 
       const saved = localStorage.getItem('ascent_active_page');
-      if (saved === 'home' || saved === 'rcm-services' || saved === 'medical-billing' || saved === 'specialties' || saved === 'specialty' || saved === 'domain-areas' || saved === 'about' || saved === 'contact') return saved as any;
+      if (saved === 'home' || saved === 'rcm-services' || saved === 'medical-billing' || saved === 'specialties' || saved === 'specialty' || saved === 'domain-areas' || saved === 'about' || saved === 'contact' || saved === 'ehr-expertise') return saved as any;
     }
     return 'home';
   });
@@ -125,6 +127,8 @@ export default function App() {
         targetPath = '/specialties';
       } else if (currentPage === 'domain-areas') {
         targetPath = '/domain-areas';
+      } else if (currentPage === 'ehr-expertise') {
+        targetPath = '/ehr-expertise';
       } else if (currentPage === 'medical-billing') {
         targetPath = `/rcm-services/${currentServiceSlug || 'medical-billing'}`;
       } else if (currentPage === 'about') {
@@ -137,7 +141,7 @@ export default function App() {
       }
       
       // Clean up any old hash and keep clean pathname
-      if (window.location.hash.startsWith('#medical-billing') || window.location.hash.startsWith('#services') || window.location.hash.startsWith('#rcm-services') || window.location.hash.startsWith('#specialt') || window.location.hash.startsWith('#domain-areas') || window.location.hash.startsWith('#locations') || window.location.hash.startsWith('#contact') || window.location.hash === '#home') {
+      if (window.location.hash.startsWith('#medical-billing') || window.location.hash.startsWith('#services') || window.location.hash.startsWith('#rcm-services') || window.location.hash.startsWith('#specialt') || window.location.hash.startsWith('#domain-areas') || window.location.hash.startsWith('#locations') || window.location.hash.startsWith('#contact') || window.location.hash.startsWith('#ehr-expertise') || window.location.hash === '#home') {
         window.history.replaceState({ page: currentPage, specialty: selectedSpecialty, service: currentServiceSlug }, '', targetPath);
       } else if (window.location.pathname !== targetPath) {
         window.history.replaceState({ page: currentPage, specialty: selectedSpecialty, service: currentServiceSlug }, '', targetPath);
@@ -176,6 +180,11 @@ export default function App() {
         setCurrentPage('contact');
         if (window.location.hash) {
           window.history.replaceState({ page: 'contact' }, '', '/contact');
+        }
+      } else if (pathname === '/ehr-expertise' || pathname === '/our-ehr-expertise' || hash === 'ehr-expertise' || hash === 'our-ehr-expertise') {
+        setCurrentPage('ehr-expertise');
+        if (window.location.hash) {
+          window.history.replaceState({ page: 'ehr-expertise' }, '', '/ehr-expertise');
         }
       } else if (pathname === '/domain-areas' || pathname === '/locations' || hash === 'domain-areas' || hash === 'locations') {
         setCurrentPage('domain-areas');
@@ -218,7 +227,7 @@ export default function App() {
     };
   }, []);
 
-  const navigateTo = (page: 'home' | 'rcm-services' | 'medical-billing' | 'specialties' | 'domain-areas' | 'about' | 'contact') => {
+  const navigateTo = (page: 'home' | 'rcm-services' | 'medical-billing' | 'specialties' | 'domain-areas' | 'about' | 'contact' | 'ehr-expertise') => {
     setCurrentPage(page);
     if (typeof window !== 'undefined') {
       localStorage.setItem('ascent_active_page', page);
@@ -229,6 +238,8 @@ export default function App() {
         targetPath = '/specialties';
       } else if (page === 'domain-areas') {
         targetPath = '/domain-areas';
+      } else if (page === 'ehr-expertise') {
+        targetPath = '/ehr-expertise';
       } else if (page === 'medical-billing') {
         targetPath = `/rcm-services/${currentServiceSlug || 'medical-billing'}`;
       } else if (page === 'about') {
@@ -436,7 +447,14 @@ export default function App() {
               DOMAIN AREAS
             </button>
 
-            <DropdownItem label="OUR EHR EXPERTISE" />
+            {/* Our EHR Expertise Navigation Button */}
+            <button 
+              type="button"
+              onClick={() => navigateTo('ehr-expertise')}
+              className={`hover:text-[#98C340] transition-colors py-4 border-0 bg-transparent cursor-pointer font-bold ${currentPage === 'ehr-expertise' ? 'text-[#98C340] border-b-2 border-[#98C340]' : ''}`}
+            >
+              OUR EHR EXPERTISE
+            </button>
             
             <a href="#" className="hover:text-[#98C340] transition-colors py-4">BLOG</a>
             
@@ -620,7 +638,12 @@ export default function App() {
                 >
                   <span>DOMAIN AREAS (LOCATIONS)</span>
                 </button>
-                <a href="#" className="py-2 hover:text-[#98C340] border-b border-gray-100">OUR EHR EXPERTISE</a>
+                <button 
+                  onClick={() => navigateTo('ehr-expertise')}
+                  className="w-full py-2 hover:text-[#98C340] border-b border-gray-100 flex items-center justify-between uppercase cursor-pointer text-left font-bold text-[#154377]"
+                >
+                  <span>OUR EHR EXPERTISE</span>
+                </button>
                 <a href="#" className="py-2 hover:text-[#98C340] border-b border-gray-100">BLOG</a>
                 <button 
                   onClick={() => navigateTo('contact')}
@@ -689,6 +712,14 @@ export default function App() {
           onBackToHome={() => navigateTo('home')}
           onNavigateToSpecialties={() => navigateTo('specialties')}
           onNavigateToServices={() => navigateTo('rcm-services')}
+        />
+      ) : currentPage === 'ehr-expertise' ? (
+        <EhrExpertisePage 
+          onBackToHome={() => navigateTo('home')}
+          onNavigateToContact={() => navigateTo('contact')}
+          onNavigateToRcmServices={() => navigateTo('rcm-services')}
+          onNavigateToSpecialties={() => navigateTo('specialties')}
+          onSelectSpecialty={(name) => navigateToSpecialty(name)}
         />
       ) : (
         <>
@@ -762,7 +793,9 @@ export default function App() {
           
           <HighPerformanceSection />
           
-          <SolutionsCardsSection />
+          <SolutionsCardsSection 
+            onCheckDetails={() => navigateTo('ehr-expertise')}
+          />
           
           <NationwideAvailability 
             onExploreAllLocations={() => navigateTo('domain-areas')}
@@ -783,6 +816,7 @@ export default function App() {
         onNavigateToRcmServices={() => navigateTo('rcm-services')}
         onNavigateToSpecialties={() => navigateTo('specialties')}
         onNavigateToDomainAreas={() => navigateTo('domain-areas')}
+        onNavigateToEhrExpertise={() => navigateTo('ehr-expertise')}
         onNavigateToContact={() => navigateTo('contact')}
         onNavigateToService={(slug) => navigateToService(slug)}
         onNavigateHome={() => navigateTo('home')}

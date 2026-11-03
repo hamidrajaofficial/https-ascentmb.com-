@@ -17,6 +17,7 @@ interface FooterProps {
   onNavigateToRcmServices?: () => void;
   onNavigateToSpecialties?: () => void;
   onNavigateToDomainAreas?: () => void;
+  onNavigateToEhrExpertise?: () => void;
   onNavigateToContact?: () => void;
   onNavigateToService?: (serviceSlug: string) => void;
   onNavigateHome?: () => void;
@@ -68,6 +69,7 @@ export function Footer({
   onNavigateToRcmServices,
   onNavigateToSpecialties,
   onNavigateToDomainAreas,
+  onNavigateToEhrExpertise,
   onNavigateToContact,
   onNavigateToService,
   onNavigateHome, 
@@ -255,6 +257,15 @@ export function Footer({
                 >
                   <ChevronRight className="w-3.5 h-3.5 text-[#98C340] shrink-0 group-hover:translate-x-0.5 transition-transform" />
                   <span>Domain Areas (Locations)</span>
+                </button>
+              </li>
+              <li>
+                <button 
+                  onClick={onNavigateToEhrExpertise || scrollToAudit} 
+                  className="hover:text-white transition-colors flex items-center gap-2 cursor-pointer text-left group"
+                >
+                  <ChevronRight className="w-3.5 h-3.5 text-[#98C340] shrink-0 group-hover:translate-x-0.5 transition-transform" />
+                  <span>Our EHR Expertise</span>
                 </button>
               </li>
               <li>
