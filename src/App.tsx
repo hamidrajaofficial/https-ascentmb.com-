@@ -27,6 +27,8 @@ import { SpecialtyTemplatePage } from './pages/SpecialtyTemplatePage';
 import AboutUsPage from './pages/AboutUsPage';
 import { ContactUsPage } from './pages/ContactUsPage';
 import { EhrExpertisePage } from './pages/EhrExpertisePage';
+import { IllinoisMedicalBillingPage } from './pages/IllinoisMedicalBillingPage';
+import { DomainAreasDropdown } from './components/DomainAreasDropdown';
 import logoImg from './assets/images/cropped-cropped-AA-300x178-1-2-removebg-preview.png';
 import heroHomeImg from './assets/images/End-to-End-Medical-Licensing-2026.webp';
 
@@ -85,7 +87,18 @@ export default function App() {
     return 'medical-billing';
   });
 
-  const [currentPage, setCurrentPage] = useState<'home' | 'rcm-services' | 'medical-billing' | 'specialties' | 'specialty' | 'domain-areas' | 'about' | 'contact' | 'ehr-expertise'>(() => {
+  const [selectedLocation, setSelectedLocation] = useState<string>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('ascent_active_location');
+      if (saved) return saved;
+      const pathname = window.location.pathname.toLowerCase();
+      if (pathname.includes('texas')) return 'Texas';
+      if (pathname.includes('illinois')) return 'Illinois';
+    }
+    return 'Texas';
+  });
+
+  const [currentPage, setCurrentPage] = useState<'home' | 'rcm-services' | 'medical-billing' | 'specialties' | 'specialty' | 'domain-areas' | 'location' | 'about' | 'contact' | 'ehr-expertise'>(() => {
     if (typeof window !== 'undefined') {
       const pathname = window.location.pathname.replace(/\/+$/, '');
       const hash = window.location.hash.replace('#', '');
@@ -96,29 +109,35 @@ export default function App() {
       if (pathname === '/about' || pathname === '/about-us' || hash === 'about' || hash === 'about-us') return 'about';
       if (pathname === '/contact' || pathname === '/contact-us' || hash === 'contact' || hash === 'contact-us') return 'contact';
       if (pathname === '/ehr-expertise' || pathname === '/our-ehr-expertise' || hash === 'ehr-expertise' || hash === 'our-ehr-expertise') return 'ehr-expertise';
+      if (pathname === '/locations/illinois' || pathname === '/domain-areas/illinois') return 'location';
+      if (pathname.startsWith('/locations/')) return 'location';
       if (pathname === '/domain-areas' || pathname === '/locations' || hash === 'domain-areas' || hash === 'locations') return 'domain-areas';
       if (pathname === '/specialties' || pathname === '/specialty' || hash === 'specialties' || hash === 'specialty') return 'specialties';
       if (pathname.startsWith('/specialties/') || pathname.startsWith('/specialty/') || hash.startsWith('specialt')) return 'specialty';
       if (hash === 'home') return 'home';
 
       const saved = localStorage.getItem('ascent_active_page');
-      if (saved === 'home' || saved === 'rcm-services' || saved === 'medical-billing' || saved === 'specialties' || saved === 'specialty' || saved === 'domain-areas' || saved === 'about' || saved === 'contact' || saved === 'ehr-expertise') return saved as any;
+      if (saved === 'home' || saved === 'rcm-services' || saved === 'medical-billing' || saved === 'specialties' || saved === 'specialty' || saved === 'domain-areas' || saved === 'location' || saved === 'about' || saved === 'contact' || saved === 'ehr-expertise') return saved as any;
     }
     return 'home';
   });
   const [isRcmMenuOpen, setIsRcmMenuOpen] = useState(false);
   const [isSpecialtiesMenuOpen, setIsSpecialtiesMenuOpen] = useState(false);
+  const [isDomainMenuOpen, setIsDomainMenuOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileRcmAccordion, setMobileRcmAccordion] = useState(false);
   const [mobileSpecialtiesAccordion, setMobileSpecialtiesAccordion] = useState(false);
+  const [mobileDomainAccordion, setMobileDomainAccordion] = useState(false);
   const rcmTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const specialtiesTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const domainTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
       localStorage.setItem('ascent_active_page', currentPage);
       localStorage.setItem('ascent_active_specialty', selectedSpecialty);
       localStorage.setItem('ascent_active_service', currentServiceSlug);
+      localStorage.setItem('ascent_active_location', selectedLocation);
       
       let targetPath = '/';
       if (currentPage === 'rcm-services') {
@@ -127,6 +146,9 @@ export default function App() {
         targetPath = '/specialties';
       } else if (currentPage === 'domain-areas') {
         targetPath = '/domain-areas';
+      } else if (currentPage === 'location') {
+        const slug = selectedLocation.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+        targetPath = `/locations/${slug}`;
       } else if (currentPage === 'ehr-expertise') {
         targetPath = '/ehr-expertise';
       } else if (currentPage === 'medical-billing') {
@@ -142,12 +164,12 @@ export default function App() {
       
       // Clean up any old hash and keep clean pathname
       if (window.location.hash.startsWith('#medical-billing') || window.location.hash.startsWith('#services') || window.location.hash.startsWith('#rcm-services') || window.location.hash.startsWith('#specialt') || window.location.hash.startsWith('#domain-areas') || window.location.hash.startsWith('#locations') || window.location.hash.startsWith('#contact') || window.location.hash.startsWith('#ehr-expertise') || window.location.hash === '#home') {
-        window.history.replaceState({ page: currentPage, specialty: selectedSpecialty, service: currentServiceSlug }, '', targetPath);
+        window.history.replaceState({ page: currentPage, specialty: selectedSpecialty, service: currentServiceSlug, location: selectedLocation }, '', targetPath);
       } else if (window.location.pathname !== targetPath) {
-        window.history.replaceState({ page: currentPage, specialty: selectedSpecialty, service: currentServiceSlug }, '', targetPath);
+        window.history.replaceState({ page: currentPage, specialty: selectedSpecialty, service: currentServiceSlug, location: selectedLocation }, '', targetPath);
       }
     }
-  }, [currentPage, selectedSpecialty, currentServiceSlug]);
+  }, [currentPage, selectedSpecialty, currentServiceSlug, selectedLocation]);
 
   useEffect(() => {
     const handleLocationChange = () => {
@@ -186,6 +208,14 @@ export default function App() {
         if (window.location.hash) {
           window.history.replaceState({ page: 'ehr-expertise' }, '', '/ehr-expertise');
         }
+      } else if (pathname === '/locations/illinois' || pathname === '/domain-areas/illinois') {
+        setSelectedLocation('Illinois');
+        setCurrentPage('location');
+      } else if (pathname.startsWith('/locations/')) {
+        const slug = pathname.replace('/locations/', '').split('/')[0];
+        const formatted = slug.charAt(0).toUpperCase() + slug.slice(1);
+        setSelectedLocation(formatted);
+        setCurrentPage('location');
       } else if (pathname === '/domain-areas' || pathname === '/locations' || hash === 'domain-areas' || hash === 'locations') {
         setCurrentPage('domain-areas');
         if (window.location.hash) {
@@ -289,10 +319,29 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const navigateToLocation = (stateName: string = 'Illinois') => {
+    setSelectedLocation(stateName);
+    setCurrentPage('location');
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('ascent_active_page', 'location');
+      localStorage.setItem('ascent_active_location', stateName);
+      const slug = stateName.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+      const targetPath = `/locations/${slug}`;
+      window.history.pushState({ page: 'location', location: stateName }, '', targetPath);
+    }
+    setIsRcmMenuOpen(false);
+    setIsSpecialtiesMenuOpen(false);
+    setIsDomainMenuOpen(false);
+    setMobileMenuOpen(false);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const handleRcmMouseEnter = () => {
     if (rcmTimeoutRef.current) clearTimeout(rcmTimeoutRef.current);
     if (specialtiesTimeoutRef.current) clearTimeout(specialtiesTimeoutRef.current);
+    if (domainTimeoutRef.current) clearTimeout(domainTimeoutRef.current);
     setIsSpecialtiesMenuOpen(false);
+    setIsDomainMenuOpen(false);
     setIsRcmMenuOpen(true);
   };
 
@@ -305,7 +354,9 @@ export default function App() {
   const handleSpecialtiesMouseEnter = () => {
     if (specialtiesTimeoutRef.current) clearTimeout(specialtiesTimeoutRef.current);
     if (rcmTimeoutRef.current) clearTimeout(rcmTimeoutRef.current);
+    if (domainTimeoutRef.current) clearTimeout(domainTimeoutRef.current);
     setIsRcmMenuOpen(false);
+    setIsDomainMenuOpen(false);
     setIsSpecialtiesMenuOpen(true);
   };
 
@@ -315,9 +366,25 @@ export default function App() {
     }, 150);
   };
 
+  const handleDomainMouseEnter = () => {
+    if (domainTimeoutRef.current) clearTimeout(domainTimeoutRef.current);
+    if (rcmTimeoutRef.current) clearTimeout(rcmTimeoutRef.current);
+    if (specialtiesTimeoutRef.current) clearTimeout(specialtiesTimeoutRef.current);
+    setIsRcmMenuOpen(false);
+    setIsSpecialtiesMenuOpen(false);
+    setIsDomainMenuOpen(true);
+  };
+
+  const handleDomainMouseLeave = () => {
+    domainTimeoutRef.current = setTimeout(() => {
+      setIsDomainMenuOpen(false);
+    }, 150);
+  };
+
   const handleHeaderMouseLeave = () => {
     handleRcmMouseLeave();
     handleSpecialtiesMouseLeave();
+    handleDomainMouseLeave();
   };
 
   const scrollToSpecialties = () => {
@@ -438,14 +505,20 @@ export default function App() {
               </button>
             </div>
 
-            {/* Domain Areas (Locations) Navigation Button */}
-            <button 
-              type="button"
-              onClick={() => navigateTo('domain-areas')}
-              className={`hover:text-[#98C340] transition-colors py-4 border-0 bg-transparent cursor-pointer font-bold ${currentPage === 'domain-areas' ? 'text-[#98C340] border-b-2 border-[#98C340]' : ''}`}
+            {/* Domain Areas (Locations) Dropdown with Mega Menu */}
+            <div 
+              className="h-full flex items-center cursor-pointer relative"
+              onMouseEnter={handleDomainMouseEnter}
             >
-              DOMAIN AREAS
-            </button>
+              <button 
+                type="button"
+                onClick={() => navigateTo('domain-areas')}
+                className={`flex items-center space-x-1 transition-colors py-4 border-0 bg-transparent cursor-pointer font-bold ${isDomainMenuOpen || currentPage === 'domain-areas' || currentPage === 'location' ? 'text-[#98C340]' : 'hover:text-[#98C340]'}`}
+              >
+                <span>DOMAIN AREAS</span>
+                <ChevronDown size={14} strokeWidth={3} className={`transition-transform duration-200 ${isDomainMenuOpen ? 'rotate-180 text-[#98C340]' : 'text-[#7ea1c4]'}`} />
+              </button>
+            </div>
 
             {/* Our EHR Expertise Navigation Button */}
             <button 
@@ -520,6 +593,22 @@ export default function App() {
                 onSelectSpecialty={(name) => {
                   navigateToSpecialty(name);
                 }}
+              />
+            </div>
+          )}
+        </AnimatePresence>
+
+        {/* Domain Areas (Locations) Dropdown */}
+        <AnimatePresence>
+          {isDomainMenuOpen && (
+            <div 
+              onMouseEnter={handleDomainMouseEnter}
+              onMouseLeave={handleDomainMouseLeave}
+            >
+              <DomainAreasDropdown 
+                onClose={() => setIsDomainMenuOpen(false)}
+                onExploreAll={() => navigateTo('domain-areas')}
+                onSelectLocation={(loc) => navigateToLocation(loc)}
               />
             </div>
           )}
@@ -632,12 +721,54 @@ export default function App() {
                   )}
                 </div>
 
-                <button 
-                  onClick={() => navigateTo('domain-areas')}
-                  className="w-full py-2 hover:text-[#98C340] border-b border-gray-100 flex items-center justify-between uppercase cursor-pointer text-left font-bold text-[#154377]"
-                >
-                  <span>DOMAIN AREAS (LOCATIONS)</span>
-                </button>
+                {/* Mobile DOMAIN AREAS Accordion */}
+                <div>
+                  <button 
+                    onClick={() => setMobileDomainAccordion(!mobileDomainAccordion)}
+                    className="w-full flex justify-between items-center py-2 text-[#154377] font-bold border-b border-gray-100 uppercase"
+                  >
+                    <span>DOMAIN AREAS</span>
+                    {mobileDomainAccordion ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                  </button>
+                  {mobileDomainAccordion && (
+                    <div className="pl-2 py-3 bg-[#FAFCFF] rounded-lg mt-2 p-3 border border-blue-100">
+                      <button
+                        onClick={() => navigateTo('domain-areas')}
+                        className="w-full mb-3 flex items-center justify-center gap-2 py-2.5 bg-[#154377] hover:bg-[#0f3259] text-white text-xs font-bold rounded-lg transition-colors cursor-pointer shadow-sm uppercase tracking-wider"
+                      >
+                        <span>Explore All 50 States (Parent Page)</span>
+                        <ArrowRight className="w-3.5 h-3.5" />
+                      </button>
+
+                      {/* Featured Illinois child page */}
+                      <button
+                        onClick={() => navigateToLocation('Illinois')}
+                        className="w-full mb-2.5 flex items-center justify-between p-2.5 bg-gradient-to-r from-[#f4f9eb] to-white rounded-lg border border-[#98C340]/40 text-left cursor-pointer"
+                      >
+                        <div className="flex items-center gap-2">
+                          <img src="https://flagcdn.com/w20/us-il.png" alt="IL" className="w-5 h-3.5 object-cover rounded" />
+                          <div>
+                            <span className="text-xs font-bold text-[#154377] block">Illinois Medical Billing Company</span>
+                            <span className="text-[10px] text-[#7fa334] font-semibold">Featured Location Page</span>
+                          </div>
+                        </div>
+                        <ArrowRight className="w-3.5 h-3.5 text-[#98C340]" />
+                      </button>
+
+                      <div className="grid grid-cols-2 gap-2 mt-2">
+                        {['Texas', 'California', 'Florida', 'New York'].map((st) => (
+                          <button
+                            key={st}
+                            onClick={() => navigateToLocation(st)}
+                            className="p-2 bg-white rounded-lg border border-gray-100 text-xs font-medium text-[#154377] text-left hover:border-[#98C340] cursor-pointer"
+                          >
+                            {st} Billing
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
                 <button 
                   onClick={() => navigateTo('ehr-expertise')}
                   className="w-full py-2 hover:text-[#98C340] border-b border-gray-100 flex items-center justify-between uppercase cursor-pointer text-left font-bold text-[#154377]"
@@ -684,6 +815,17 @@ export default function App() {
         <DomainAreasPage 
           onBackToHome={() => navigateTo('home')}
           onNavigateToSpecialties={() => navigateTo('specialties')}
+          onNavigateToRcmServices={() => navigateTo('rcm-services')}
+          onSelectSpecialty={(name) => navigateToSpecialty(name)}
+          onSelectLocation={(loc) => navigateToLocation(loc)}
+        />
+      ) : currentPage === 'location' ? (
+        <IllinoisMedicalBillingPage 
+          stateName={selectedLocation}
+          onSelectState={(loc) => navigateToLocation(loc)}
+          onBackToHome={() => navigateTo('home')}
+          onNavigateToDomainAreas={() => navigateTo('domain-areas')}
+          onNavigateToContact={() => navigateTo('contact')}
           onNavigateToRcmServices={() => navigateTo('rcm-services')}
           onSelectSpecialty={(name) => navigateToSpecialty(name)}
         />

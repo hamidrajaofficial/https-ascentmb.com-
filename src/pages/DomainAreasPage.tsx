@@ -9,13 +9,15 @@ export interface DomainAreasPageProps {
   onNavigateToSpecialties?: () => void;
   onNavigateToRcmServices?: () => void;
   onSelectSpecialty?: (specialtyName: string) => void;
+  onSelectLocation?: (stateName: string) => void;
 }
 
 export function DomainAreasPage({
   onBackToHome,
   onNavigateToSpecialties,
   onNavigateToRcmServices,
-  onSelectSpecialty
+  onSelectSpecialty,
+  onSelectLocation
 }: DomainAreasPageProps) {
 
   const scrollToAudit = () => {
@@ -29,6 +31,10 @@ export function DomainAreasPage({
   };
 
   const handleSelectState = (stateName: string) => {
+    if (onSelectLocation) {
+      onSelectLocation(stateName);
+      return;
+    }
     const el = document.getElementById('location-appointment-form') || document.getElementById('consultation-form');
     el?.scrollIntoView({ behavior: 'smooth' });
   };
