@@ -1,5 +1,5 @@
 import React from 'react';
-import { Home, ChevronRight, CheckCircle2, ShieldCheck, ArrowRight, Phone, FileText, User, Users, Building, Landmark } from 'lucide-react';
+import { CheckCircle2, ShieldCheck, ArrowRight, Phone, FileText, User, Users, Building, Landmark } from 'lucide-react';
 import { IllinoisHeroSection } from '../components/IllinoisHeroSection';
 import { StatsSection, StatItem } from '../components/StatsSection';
 import { IllinoisThirdPartySection } from '../components/IllinoisThirdPartySection';
@@ -80,60 +80,6 @@ export function IllinoisMedicalBillingPage({
 
   return (
     <div className="w-full min-h-screen bg-white">
-      {/* Breadcrumb Navigation Bar & State Switcher */}
-      <div className="w-full bg-[#f4f7fa] border-b border-gray-200/70 py-2.5 px-4 sm:px-6">
-        <div className="max-w-[1250px] mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs sm:text-[13px] text-gray-500 font-medium">
-          <div className="flex items-center gap-2 flex-wrap">
-            <button 
-              onClick={onBackToHome}
-              className="flex items-center gap-1 text-[#154377] hover:text-[#98C340] transition-colors cursor-pointer"
-            >
-              <Home className="w-3.5 h-3.5" />
-              <span>Home</span>
-            </button>
-            
-            <ChevronRight className="w-3.5 h-3.5 text-gray-400" />
-            
-            <button 
-              onClick={onNavigateToDomainAreas}
-              className="text-[#154377] hover:text-[#98C340] transition-colors cursor-pointer"
-            >
-              Domain Areas
-            </button>
-
-            <ChevronRight className="w-3.5 h-3.5 text-gray-400" />
-
-            <span className="text-[#154377] font-semibold">{stateName} Medical Billing</span>
-          </div>
-
-          {/* Quick State Toggle Chips */}
-          <div className="flex items-center gap-1.5 flex-wrap">
-            <span className="text-[11px] text-gray-400 font-semibold mr-1">Switch State:</span>
-            {[
-              { name: 'Texas', code: 'tx' },
-              { name: 'Illinois', code: 'il' },
-              { name: 'Florida', code: 'fl' },
-              { name: 'California', code: 'ca' }
-            ].map((st) => (
-              <button
-                key={st.name}
-                type="button"
-                onClick={() => {
-                  if (onSelectState) onSelectState(st.name);
-                }}
-                className={`px-2.5 py-1 rounded-md text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
-                  stateName.toLowerCase() === st.name.toLowerCase()
-                    ? 'bg-[#154377] text-white shadow-xs'
-                    : 'bg-white text-gray-600 hover:text-[#154377] hover:bg-gray-100 border border-gray-200'
-                }`}
-              >
-                <span>{st.name}</span>
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
-
       {/* 1. HERO SECTION (matching Image 1) */}
       <IllinoisHeroSection 
         stateName={stateName}
