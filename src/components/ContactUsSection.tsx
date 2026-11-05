@@ -3,12 +3,13 @@ import { MapPin, Mail, Phone, Facebook, Twitter, Linkedin, Instagram, AlertTrian
 
 export interface ContactUsSectionProps {
   specialtyName?: string;
+  id?: string;
 }
 
-export function ContactUsSection({ specialtyName }: ContactUsSectionProps = {}) {
+export function ContactUsSection({ specialtyName, id = "contact-section" }: ContactUsSectionProps = {}) {
   return (
     <section 
-      id="contact-section"
+      id={id}
       className="relative py-[80px] bg-cover bg-center bg-no-repeat overflow-hidden"
       style={{
         backgroundImage: `url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTYdfWFLXABdJqy8EwRiRbuZJvM1c7EacpaXtMhb1IsRW4Ylkb6KrxIDK_&s=10')`
@@ -53,10 +54,12 @@ export function ContactUsSection({ specialtyName }: ContactUsSectionProps = {}) 
               </div>
               <div className="p-4 sm:p-5 flex flex-col items-center text-center flex-1 justify-between">
                 <div className="pt-2">
-                  <span className="inline-block px-3 py-0.5 border border-[#98C340]/60 rounded-full text-[11px] font-semibold text-[#98C340] mb-2">Head Office</span>
-                  <h4 className="text-[22px] font-bold text-white mb-1 font-outfit">California</h4>
+                  <span className="inline-block px-3 py-0.5 border border-[#98C340]/60 rounded-full text-[11px] font-semibold text-[#98C340] mb-2">
+                    {specialtyName ? `${specialtyName} Regional Office` : 'Head Office'}
+                  </span>
+                  <h4 className="text-[22px] font-bold text-white mb-1 font-outfit">{specialtyName || 'California'}</h4>
                   <span className="text-[13px] text-white/90 leading-relaxed block mb-2">
-                    California, USA
+                    {specialtyName ? `${specialtyName}, USA` : 'California, USA'}
                   </span>
                 </div>
                 <div className="flex flex-col gap-2 w-full mt-auto">

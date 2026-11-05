@@ -10,7 +10,9 @@ import { SpecialtiesSection } from '../components/SpecialtiesSection';
 import { MaximizePracticeRevenueSection } from '../components/MaximizePracticeRevenueSection';
 import { NationwideAvailability } from '../components/NationwideAvailability';
 import { TestimonialsSection } from '../components/TestimonialsSection';
+import { SolutionsCardsSection } from '../components/SolutionsCardsSection';
 import { GotQuestionsAuditSection } from '../components/GotQuestionsAuditSection';
+import { ContactUsSection } from '../components/ContactUsSection';
 
 export interface IllinoisMedicalBillingPageProps {
   stateName?: string;
@@ -35,7 +37,7 @@ export function IllinoisMedicalBillingPage({
   const isIllinois = stateName.toLowerCase() === 'illinois';
 
   const scrollToAudit = () => {
-    const el = document.getElementById('consultation-form') || document.getElementById('location-appointment-form');
+    const el = document.getElementById('contact-section') || document.getElementById('consultation-form') || document.getElementById('location-appointment-form');
     if (el) {
       el.scrollIntoView({ behavior: 'smooth' });
     } else if (onNavigateToContact) {
@@ -123,6 +125,7 @@ export function IllinoisMedicalBillingPage({
         }}
       />
 
+
       {/* 6. Superior Healthcare Virtual Assistant Packages Section (dynamic for state) */}
       <VirtualAssistantPackagesSection 
         eyebrow={`PERFECT MATCH FOR EVERY ${stateName.toUpperCase()} PRACTICE`}
@@ -145,7 +148,26 @@ export function IllinoisMedicalBillingPage({
         onSelectSpecialty={onSelectSpecialty}
       />
 
-      {/* 9. Maximize Your Practice Revenue Section (matching user image_01538714.png) */}
+      {/* 8. Form Section (Let's Talk About Your Revenue Cycle used in home page - Called after Medical Specialties) */}
+      <ContactUsSection 
+        specialtyName={stateName}
+        id="contact-section"
+      />
+
+      {/* 9. Medical Billing Software We Are Experts In / EHR Compatibility Section (Called after form section) */}
+      <SolutionsCardsSection 
+        specialtyName={stateName}
+        onCheckDetails={scrollToAudit}
+      />
+
+      {/* 10. Locations Section (Texas Billing Services Trusted by Healthcare Practices Across All 50 US States) */}
+      <NationwideAvailability 
+        specialtyName={stateName}
+        onExploreAllLocations={onNavigateToDomainAreas}
+        onFindNearYou={onNavigateToDomainAreas}
+      />
+
+      {/* 11. Maximize Your Practice Revenue Section (Moved after NationwideAvailability) */}
       <MaximizePracticeRevenueSection 
         stateName={stateName}
         onBookCall={scrollToAudit}
@@ -154,17 +176,10 @@ export function IllinoisMedicalBillingPage({
         }}
       />
 
-      {/* 10. Locations Section (Nationwide & State Cities) */}
-      <NationwideAvailability 
-        specialtyName={stateName}
-        onExploreAllLocations={onNavigateToDomainAreas}
-        onFindNearYou={onNavigateToDomainAreas}
-      />
-
-      {/* 8. Review Section (Physician Video Testimonials & Verified Reviews) */}
+      {/* 12. Review Section (Physician Video Testimonials & Verified Reviews) */}
       <TestimonialsSection />
 
-      {/* 9. Lead Capture & Consultation Form Section */}
+      {/* 13. Lead Capture & FAQ Section */}
       <GotQuestionsAuditSection 
         id="consultation-form"
       />

@@ -1,7 +1,11 @@
 import React from 'react';
 import { ShieldCheck, Layers, Power, Rocket, Users, BarChart2, RefreshCw, TrendingUp, Activity } from 'lucide-react';
 
-export function WhatYouGetSection() {
+export interface WhatYouGetSectionProps {
+  stateName?: string;
+}
+
+export function WhatYouGetSection({ stateName }: WhatYouGetSectionProps = {}) {
   return (
     <section className="py-[80px] bg-white">
       <div className="max-w-[1250px] mx-auto px-4">
@@ -19,12 +23,14 @@ export function WhatYouGetSection() {
             </div>
             
             <h2 className="text-[32px] md:text-[40px] lg:text-[40px] font-bold font-outfit text-[#154377] mb-6 leading-[1.1] tracking-tight">
-              Benefits of Our <span className="text-[#98C340]">Medical Billing Services</span> Company
+              Benefits of Our <span className="text-[#98C340]">Medical Billing Services</span> Company{stateName ? ` in ${stateName}` : ''}
             </h2>
             
             <div className="space-y-6 text-gray-500 font-normal leading-relaxed text-[17px]">
               <p>
-                Indeed, choosing the right healthcare practice management services can make a world of difference for healthcare practitioners. Here are some key advantages for working with our medical billing service provider:
+                {stateName
+                  ? `Indeed, choosing the right healthcare practice management services in ${stateName} can make a world of difference for healthcare practitioners. Here are some key advantages for working with our medical billing service provider:`
+                  : `Indeed, choosing the right healthcare practice management services can make a world of difference for healthcare practitioners. Here are some key advantages for working with our medical billing service provider:`}
               </p>
             </div>
           </div>
